@@ -48,6 +48,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+            // Enable CORS before other filters
+            .cors(cors -> {})
             // Configure authorization rules
             .authorizeHttpRequests(authorize -> authorize
                 // Permit access to health and info endpoints

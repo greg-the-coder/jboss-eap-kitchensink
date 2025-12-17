@@ -27,6 +27,12 @@ spring:
       name: ${DEV_USERNAME:dev}
       password: ${DEV_PASSWORD:dev}
 
+# CORS Configuration for Development
+cors:
+  allowed-origins:
+    - http://localhost:3000
+    - http://127.0.0.1:3000
+
 logging:
   level:
     root: INFO

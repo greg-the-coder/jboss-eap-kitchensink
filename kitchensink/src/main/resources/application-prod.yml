@@ -34,6 +34,12 @@ server:
 #    key-store-password: ${SSL_KEY_STORE_PASSWORD}
 #    key-store-type: PKCS12
 
+# CORS Configuration for Production
+# Set ALLOWED_ORIGINS environment variable with comma-separated production frontend URLs
+# Example: https://your-frontend.com,https://www.your-frontend.com
+cors:
+  allowed-origins: ${ALLOWED_ORIGINS:https://your-frontend.com}
+
 logging:
   level:
     root: WARN
