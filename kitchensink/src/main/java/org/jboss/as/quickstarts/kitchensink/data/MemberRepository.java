@@ -16,45 +16,41 @@
  */
 package org.jboss.as.quickstarts.kitchensink.data;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import java.util.List;
+import java.util.Optional;
 
 import org.jboss.as.quickstarts.kitchensink.model.Member;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
-@ApplicationScoped
-public class MemberRepository {
+/**
+ * Spring Data JPA repository for Member entities.
+ * 
+ * This interface replaces the CDI-based repository with Spring Data JPA,
+ * eliminating the need for manual EntityManager and Criteria API code.
+ * Spring Data JPA will automatically implement these methods based on
+ * naming conventions and annotations.
+ */
+@Repository
+public interface MemberRepository extends JpaRepository<Member, Long> {
 
-    @Inject
-    private EntityManager em;
+    /**
+     * Find a member by email address.
+     * Spring Data JPA derives the query from the method name.
+     * 
+     * @param email the email address to search for
+     * @return Optional containing the member if found, empty otherwise
+     */
+    Optional<Member> findByEmail(String email);
 
-    public Member findById(Long id) {
-        return em.find(Member.class, id);
-    }
-
-    public Member findByEmail(String email) {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Member> criteria = cb.createQuery(Member.class);
-        Root<Member> member = criteria.from(Member.class);
-        // Swap criteria statements if you would like to try out type-safe criteria queries, a new
-        // feature in JPA 2.0
-        // criteria.select(member).where(cb.equal(member.get(Member_.email), email));
-        criteria.select(member).where(cb.equal(member.get("email"), email));
-        return em.createQuery(criteria).getSingleResult();
-    }
-
-    public List<Member> findAllOrderedByName() {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Member> criteria = cb.createQuery(Member.class);
-        Root<Member> member = criteria.from(Member.class);
-        // Swap criteria statements if you would like to try out type-safe criteria queries, a new
-        // feature in JPA 2.0
-        // criteria.select(member).orderBy(cb.asc(member.get(Member_.name)));
-        criteria.select(member).orderBy(cb.asc(member.get("name")));
-        return em.createQuery(criteria).getResultList();
-    }
+    /**
+     * Find all members ordered by name in ascending order.
+     * Using @Query annotation for clarity, but could also use:
+     * List<Member> findAllByOrderByNameAsc()
+     * 
+     * @return list of all members sorted by name
+     */
+    @Query("SELECT m FROM Member m ORDER BY m.name ASC")
+    List<Member> findAllOrderedByName();
 }
