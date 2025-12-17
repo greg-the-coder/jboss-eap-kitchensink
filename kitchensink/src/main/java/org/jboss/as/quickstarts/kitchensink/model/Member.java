@@ -18,21 +18,24 @@ package org.jboss.as.quickstarts.kitchensink.model;
 
 import java.io.Serializable;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
-import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.NotEmpty;
-
+/**
+ * JPA Entity representing a Member in the Kitchensink application.
+ * This entity is compatible with Spring Boot 3.x and Spring Data JPA.
+ * Uses Jakarta EE 9+ annotations (jakarta.* namespace).
+ */
 @SuppressWarnings("serial")
 @Entity
 @XmlRootElement
@@ -44,18 +47,18 @@ public class Member implements Serializable {
     private Long id;
 
     @NotNull
-    @Size(min = 1, max = 25)
+    @Size(min = 1, max = 25, message = "Name must be between 1 and 25 characters")
     @Pattern(regexp = "[^0-9]*", message = "Must not contain numbers")
     private String name;
 
     @NotNull
-    @NotEmpty
-    @Email
+    @Size(min = 1, message = "Email cannot be empty")
+    @Email(message = "Must be a valid email address")
     private String email;
 
     @NotNull
-    @Size(min = 10, max = 12)
-    @Digits(fraction = 0, integer = 12)
+    @Size(min = 10, max = 12, message = "Phone number must be between 10 and 12 digits")
+    @Digits(fraction = 0, integer = 12, message = "Phone number must contain only digits")
     @Column(name = "phone_number")
     private String phoneNumber;
 
