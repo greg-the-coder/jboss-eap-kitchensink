@@ -1,0 +1,44 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Debug Spring Boot Application",
+            "request": "attach",
+            "hostName": "localhost",
+            "port": 5005,
+            "projectName": "jboss-kitchensink"
+        },
+        {
+            "type": "java",
+            "name": "Launch Spring Boot (Dev Profile)",
+            "request": "launch",
+            "mainClass": "org.jboss.as.quickstarts.kitchensink.KitchensinkApplication",
+            "projectName": "jboss-kitchensink",
+            "args": "--spring.profiles.active=dev",
+            "cwd": "${workspaceFolder}/kitchensink"
+        },
+        {
+            "type": "java",
+            "name": "Launch Spring Boot (Prod Profile)",
+            "request": "launch",
+            "mainClass": "org.jboss.as.quickstarts.kitchensink.KitchensinkApplication",
+            "projectName": "jboss-kitchensink",
+            "args": "--spring.profiles.active=prod",
+            "cwd": "${workspaceFolder}/kitchensink",
+            "env": {
+                "DB_URL": "jdbc:mysql://localhost:3306/kitchensink",
+                "DB_USERNAME": "kitchensink",
+                "DB_PASSWORD": "kitchensink"
+            }
+        },
+        {
+            "type": "java",
+            "name": "Run Current Test",
+            "request": "launch",
+            "mainClass": "",
+            "projectName": "jboss-kitchensink",
+            "cwd": "${workspaceFolder}/kitchensink"
+        }
+    ]
+}

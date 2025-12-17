@@ -22,8 +22,10 @@ spring:
 
   security:
     user:
-      name: dev
-      password: dev
+      # Development credentials - externalize via environment variables for security
+      # Set DEV_USERNAME and DEV_PASSWORD environment variables
+      name: ${DEV_USERNAME:dev}
+      password: ${DEV_PASSWORD:dev}
 
 logging:
   level:
@@ -32,3 +34,4 @@ logging:
     org.springframework.web: DEBUG
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+

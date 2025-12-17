@@ -1,21 +1,6 @@
-/*
- * JBoss, Home of Professional Open Source
- * Copyright 2014, Red Hat, Inc. and/or its affiliates, and individual
- * contributors by the @authors tag. See the copyright.txt in the
- * distribution for a full listing of individual contributors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package org.jboss.as.quickstarts.kitchensink.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -40,6 +25,18 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
+
+    @Value("${app.security.user.username:user}")
+    private String userUsername;
+
+    @Value("${app.security.user.password:password}")
+    private String userPassword;
+
+    @Value("${app.security.admin.username:admin}")
+    private String adminUsername;
+
+    @Value("${app.security.admin.password:admin}")
+    private String adminPassword;
 
     /**
      * Configure HTTP security.
@@ -96,22 +93,26 @@ public class SecurityConfig {
     /**
      * Configure in-memory user details service for development.
      * 
-     * WARNING: For production, replace with database-backed UserDetailsService
-     * and change default credentials immediately.
+     * Credentials are externalized via application properties:
+     * - app.security.user.username / app.security.user.password
+     * - app.security.admin.username / app.security.admin.password
+     * 
+     * For production, replace with database-backed UserDetailsService
+     * or integrate with external identity provider (LDAP, OAuth2, SAML).
      * 
      * @return UserDetailsService with in-memory users
      */
     @Bean
     public UserDetailsService userDetailsService() {
         UserDetails user = User.builder()
-            .username("user")
-            .password(passwordEncoder().encode("password"))
+            .username(userUsername)
+            .password(passwordEncoder().encode(userPassword))
             .roles("USER")
             .build();
 
         UserDetails admin = User.builder()
-            .username("admin")
-            .password(passwordEncoder().encode("admin"))
+            .username(adminUsername)
+            .password(passwordEncoder().encode(adminPassword))
             .roles("USER", "ADMIN")
             .build();
 

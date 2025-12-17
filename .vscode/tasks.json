@@ -1,0 +1,182 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Gradle: Build",
+            "type": "shell",
+            "command": "./gradlew",
+            "args": ["build"],
+            "options": {
+                "cwd": "${workspaceFolder}/kitchensink"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Gradle: Clean Build",
+            "type": "shell",
+            "command": "./gradlew",
+            "args": ["clean", "build"],
+            "options": {
+                "cwd": "${workspaceFolder}/kitchensink"
+            },
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Gradle: Test",
+            "type": "shell",
+            "command": "./gradlew",
+            "args": ["test"],
+            "options": {
+                "cwd": "${workspaceFolder}/kitchensink"
+            },
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Gradle: Run (Dev Profile)",
+            "type": "shell",
+            "command": "./gradlew",
+            "args": ["bootRun", "--args='--spring.profiles.active=dev'"],
+            "options": {
+                "cwd": "${workspaceFolder}/kitchensink"
+            },
+            "isBackground": true,
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "dedicated"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Gradle: Run (Prod Profile)",
+            "type": "shell",
+            "command": "./gradlew",
+            "args": ["bootRun", "--args='--spring.profiles.active=prod'"],
+            "options": {
+                "cwd": "${workspaceFolder}/kitchensink"
+            },
+            "isBackground": true,
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "dedicated"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Docker: Build Image",
+            "type": "shell",
+            "command": "docker",
+            "args": ["build", "-t", "kitchensink:latest", "."],
+            "options": {
+                "cwd": "${workspaceFolder}/kitchensink"
+            },
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Docker: Run Container",
+            "type": "shell",
+            "command": "docker",
+            "args": [
+                "run",
+                "-p", "8080:8080",
+                "-e", "SPRING_PROFILES_ACTIVE=dev",
+                "kitchensink:latest"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/kitchensink"
+            },
+            "isBackground": true,
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "dedicated"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Docker Compose: Start Databases",
+            "type": "shell",
+            "command": "docker-compose",
+            "args": ["-f", ".devcontainer/docker-compose.yml", "up", "-d", "mysql", "postgres"],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Docker Compose: Stop Databases",
+            "type": "shell",
+            "command": "docker-compose",
+            "args": ["-f", ".devcontainer/docker-compose.yml", "stop", "mysql", "postgres"],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Check Application Health",
+            "type": "shell",
+            "command": "curl",
+            "args": ["-s", "http://localhost:8080/actuator/health"],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        }
+    ]
+}

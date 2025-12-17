@@ -1,0 +1,49 @@
+# Devcontainer Docker ignore file
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Build outputs
+build/
+target/
+*.jar
+*.war
+*.ear
+
+# IDE
+.vscode/
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+.factorypath
+
+# Gradle
+.gradle/
+gradlew
+gradlew.bat
+gradle/
+
+# Maven
+.mvn/
+mvnw
+mvnw.cmd
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db
+
+# Node modules (if any)
+node_modules/
+
+# Documentation build
+docs/_build/

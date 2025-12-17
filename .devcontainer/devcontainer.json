@@ -1,0 +1,156 @@
+{
+    "name": "JBoss EAP Kitchensink Spring Boot",
+    "dockerComposeFile": "docker-compose.yml",
+    "service": "workspace",
+    "workspaceFolder": "/workspace",
+    
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                // Java development
+                "vscjava.vscode-java-pack",
+                "vscjava.vscode-spring-boot-dashboard",
+                "vscjava.vscode-spring-initializr",
+                "pivotal.vscode-spring-boot",
+                "vmware.vscode-boot-dev-pack",
+                
+                // Gradle and Maven
+                "vscjava.vscode-gradle",
+                "vscjava.vscode-maven",
+                
+                // Docker and Container support
+                "ms-azuretools.vscode-docker",
+                "ms-vscode-remote.remote-containers",
+                
+                // YAML and configuration
+                "redhat.vscode-yaml",
+                "redhat.vscode-xml",
+                
+                // Git and version control
+                "eamodio.gitlens",
+                
+                // REST API testing
+                "humao.rest-client",
+                
+                // Code quality
+                "sonarsource.sonarlint-vscode",
+                
+                // Markdown
+                "yzhang.markdown-all-in-one"
+            ],
+            "settings": {
+                "terminal.integrated.defaultProfile.linux": "zsh",
+                "terminal.integrated.fontFamily": "'Hack Nerd Font Mono'",
+                
+                // Java settings
+                "java.home": "/opt/java/openjdk",
+                "java.configuration.runtimes": [
+                    {
+                        "name": "JavaSE-17",
+                        "path": "/opt/java/openjdk",
+                        "default": true
+                    }
+                ],
+                "java.jdt.ls.java.home": "/opt/java/openjdk",
+                "java.import.gradle.home": "/opt/gradle-8.5",
+                "java.import.gradle.java.home": "/opt/java/openjdk",
+                "java.import.gradle.wrapper.enabled": true,
+                
+                // Spring Boot settings
+                "spring-boot.ls.java.home": "/opt/java/openjdk",
+                "spring.initializr.defaultLanguage": "Java",
+                
+                // Gradle settings
+                "gradle.newestGradleVersion": "8.5",
+                "gradle.javaHome": "/opt/java/openjdk",
+                
+                // Editor settings
+                "files.exclude": {
+                    "**/.gradle": true,
+                    "**/build": true,
+                    "**/.classpath": true,
+                    "**/.project": true,
+                    "**/.settings": true,
+                    "**/.factorypath": true
+                },
+                "files.watcherExclude": {
+                    "**/.gradle/**": true,
+                    "**/build/**": true
+                },
+                
+                // Format on save
+                "editor.formatOnSave": true,
+                "java.format.enabled": true,
+                
+                // Git settings
+                "git.autofetch": true,
+                "git.confirmSync": false
+            }
+        }
+    },
+    
+    // Mount Docker socket for building container images
+    "mounts": [
+        "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
+    ],
+    
+    // Enable Docker-outside-of-Docker
+    "features": {
+        "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {
+            "version": "latest",
+            "moby": true
+        }
+    },
+    
+    // Exposed ports for the application and databases
+    "forwardPorts": [
+        8080,   // Spring Boot application
+        3306,   // MySQL
+        5432,   // PostgreSQL
+        5005    // Java debug port
+    ],
+    
+    "portsAttributes": {
+        "8080": {
+            "label": "Spring Boot App",
+            "onAutoForward": "notify"
+        },
+        "3306": {
+            "label": "MySQL Database",
+            "onAutoForward": "silent"
+        },
+        "5432": {
+            "label": "PostgreSQL Database",
+            "onAutoForward": "silent"
+        },
+        "5005": {
+            "label": "Java Debug Port",
+            "onAutoForward": "silent"
+        }
+    },
+    
+    // Commands to run after container is created
+    "postCreateCommand": "cd /workspace/kitchensink && gradle wrapper --gradle-version 8.5 && ./gradlew --version",
+    
+    // Commands to run when starting the container
+    "postStartCommand": "echo '✅ Development environment ready!'",
+    
+    // Set environment variables
+    "remoteEnv": {
+        "JAVA_HOME": "/opt/java/openjdk",
+        "GRADLE_HOME": "/opt/gradle-8.5",
+        "MAVEN_HOME": "/opt/apache-maven-3.9.6",
+        "SPRING_PROFILES_ACTIVE": "dev",
+        "DB_HOST": "localhost",
+        "DB_PORT": "3306",
+        "DB_NAME": "kitchensink",
+        "DB_USERNAME": "kitchensink",
+        "DB_PASSWORD": "kitchensink"
+    },
+    
+    // User to run as inside the container
+    "remoteUser": "root",
+    
+    // Lifecycle scripts
+    "updateContentCommand": "cd /workspace/kitchensink && ./gradlew dependencies --refresh-dependencies"
+}

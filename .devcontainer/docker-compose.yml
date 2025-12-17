@@ -1,0 +1,71 @@
+version: '3.8'
+
+services:
+  # Development workspace container
+  workspace:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ../:/workspace:cached
+      # Mount Gradle cache for faster builds
+      - gradle-cache:/workspace/.gradle
+      # Mount Maven cache for faster builds
+      - maven-cache:/root/.m2
+    depends_on:
+      - mysql
+      - postgres
+    # Share network with database for easy connection
+    network_mode: service:mysql
+    command: -c "sleep infinity"
+
+  # MySQL database for production profile testing
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: kitchensink
+      MYSQL_USER: kitchensink
+      MYSQL_PASSWORD: kitchensink
+    ports:
+      - "3306:3306"
+      - "8080:8080"  # Application port
+      - "5005:5005"  # Debug port
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
+    command: --default-authentication-plugin=mysql_native_password
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # PostgreSQL database for alternative testing
+  postgres:
+    image: postgres:16-bookworm
+    environment:
+      POSTGRES_DB: kitchensink
+      POSTGRES_USER: kitchensink
+      POSTGRES_PASSWORD: kitchensink
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U kitchensink"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  mysql-data:
+    driver: local
+  postgres-data:
+    driver: local
+  gradle-cache:
+    driver: local
+  maven-cache:
+    driver: local
