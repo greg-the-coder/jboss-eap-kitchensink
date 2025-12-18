@@ -32,8 +32,15 @@ Click **"Reopen in Container"** when prompted.
 From VS Code terminal:
 
 ```bash
+# Option 1: Automated script (RECOMMENDED)
+./start-backend.sh
+
+# Option 2: Manual launch
 docker compose -f docker-compose-backend.yml up -d
 ```
+
+**⚠️ Getting Maven Central 403 errors?**  
+Use Option 1 (`./start-backend.sh`) or see [BACKEND_LAUNCH_TROUBLESHOOTING.md](./BACKEND_LAUNCH_TROUBLESHOOTING.md)
 
 Wait 60-90 seconds for backend to become healthy.
 

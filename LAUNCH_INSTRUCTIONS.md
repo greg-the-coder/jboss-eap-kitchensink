@@ -385,6 +385,16 @@ docker compose -f docker-compose-frontend.yml down -v
 
 **Symptom**: Backend container exits immediately or shows "unhealthy" status
 
+**⚠️ Maven Central 403 Error?**  
+If you're getting `403 Forbidden` errors from Maven Central, see:  
+**[BACKEND_LAUNCH_TROUBLESHOOTING.md](./BACKEND_LAUNCH_TROUBLESHOOTING.md)** for detailed solutions.
+
+**Quick Fix**:
+```bash
+# Use pre-built JAR approach (avoids Maven Central)
+./start-backend.sh
+```
+
 **Solutions**:
 
 1. Check if MySQL is running:
@@ -398,6 +408,7 @@ docker compose -f docker-compose-frontend.yml down -v
    ```
 
 3. Common issues:
+   - **Maven Central 403**: Use `./start-backend.sh` or see troubleshooting guide
    - **Database connection refused**: Ensure MySQL is healthy
    - **Port 8080 already in use**: Stop conflicting process or change port
    - **Build failed**: Check build logs for compilation errors
