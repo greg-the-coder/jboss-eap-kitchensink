@@ -16,6 +16,48 @@ The .devcontainer specification has been updated to provide a complete full-stac
 
 ## 🐛 Bug Fixes (Latest)
 
+### Fixed Maven Compiler Plugin for Java 21 (2025-12-18)
+**Issue**: Docker build failing during Maven compilation  
+**Error Message**: `Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.11.0:compile (default-compile) on project jboss-kitchensink: Fatal error compiling: error: release version 21 not supported`  
+**Root Cause**: 
+- Maven compiler plugin 3.11.0 (inherited from Spring Boot parent) has incomplete Java 21 support
+- Maven compiler properties (source, target, release) were not explicitly configured for Java 21
+- Dockerfile was still using Java 17 base images for build and runtime
+
+**Fixes Applied**:
+
+1. **pom.xml - Explicit Maven Compiler Properties**:
+   ```xml
+   <maven.compiler.source>21</maven.compiler.source>
+   <maven.compiler.target>21</maven.compiler.target>
+   <maven.compiler.release>21</maven.compiler.release>
+   ```
+
+2. **pom.xml - Upgraded Maven Compiler Plugin**:
+   ```xml
+   <plugin>
+       <groupId>org.apache.maven.plugins</groupId>
+       <artifactId>maven-compiler-plugin</artifactId>
+       <version>3.13.0</version>
+       <configuration>
+           <release>21</release>
+       </configuration>
+   </plugin>
+   ```
+   - Version: 3.11.0 → 3.13.0 (full Java 21 support)
+
+3. **Dockerfile - Updated Base Images**:
+   - Build stage: `maven:3.9-eclipse-temurin-17` → `maven:3.9-eclipse-temurin-21`
+   - Runtime stage: `eclipse-temurin:17-jre-alpine` → `eclipse-temurin:21-jre-alpine`
+
+**Benefits**:
+- ✅ Docker build now succeeds with Java 21
+- ✅ Consistent Java 21 usage throughout build and runtime
+- ✅ Maven compiler plugin 3.13.0 has full Java 21 feature support
+- ✅ Application JAR is compiled with Java 21 bytecode
+
+**Build Command**: `docker build -t kitchensink:latest kitchensink/`
+
 ### Upgraded Java Version to 21 (2025-12-18)
 **Issue**: VS Code Java extensions require Java 21 minimum, but container was using Java 17  
 **Error Message**: `The Java runtime set by 'java.jdt.ls.java.home' does not meet the minimum required version of '21'`  
