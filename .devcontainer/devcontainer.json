@@ -188,12 +188,22 @@
     
     "portsAttributes": {
         "3000": {
-            "label": "Next.js Frontend",
+            "label": "Next.js Frontend (Dev)",
+            "onAutoForward": "notify",
+            "protocol": "http"
+        },
+        "3001": {
+            "label": "Next.js Frontend (Container)",
             "onAutoForward": "notify",
             "protocol": "http"
         },
         "8080": {
-            "label": "Spring Boot Backend",
+            "label": "Spring Boot Backend (Dev)",
+            "onAutoForward": "notify",
+            "protocol": "http"
+        },
+        "8081": {
+            "label": "Spring Boot Backend (Container)",
             "onAutoForward": "notify",
             "protocol": "http"
         },
@@ -206,7 +216,11 @@
             "onAutoForward": "silent"
         },
         "5005": {
-            "label": "Java Debug Port",
+            "label": "Java Debug Port (Dev)",
+            "onAutoForward": "silent"
+        },
+        "5006": {
+            "label": "Java Debug Port (Container)",
             "onAutoForward": "silent"
         }
     },

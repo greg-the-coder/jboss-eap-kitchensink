@@ -164,8 +164,12 @@ fi
 # Step 10: Display usage information
 echo -e "\n${BLUE}=== Frontend Successfully Launched! ===${NC}\n"
 echo -e "Frontend UI available at: ${GREEN}http://localhost:3001${NC}"
-echo -e "Backend API URL: ${GREEN}http://localhost:8080${NC}"
-echo -e "\n${YELLOW}Note: If accessing from outside devcontainer, use the host's IP instead of localhost${NC}\n"
+echo -e "Backend API URL: ${GREEN}http://localhost:8081${NC}"
+echo -e "\n${YELLOW}📋 Port Forwarding Instructions:${NC}"
+echo -e "${YELLOW}1. In VS Code, open the 'Ports' tab (View → Terminal → Ports)${NC}"
+echo -e "${YELLOW}2. Click 'Forward a Port' and add port 3001${NC}"
+echo -e "${YELLOW}3. Access the frontend at the forwarded URL${NC}"
+echo -e "\n${YELLOW}Alternative: Use VS Code's port forwarding notification that should appear${NC}\n"
 
 echo -e "${YELLOW}Useful commands:${NC}"
 echo -e "  View logs:      $COMPOSE_CMD -f $TEMP_COMPOSE logs -f frontend"
