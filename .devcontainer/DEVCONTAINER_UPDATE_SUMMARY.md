@@ -16,6 +16,34 @@ The .devcontainer specification has been updated to provide a complete full-stac
 
 ## 🐛 Bug Fixes (Latest)
 
+### Fixed Next.js Docker Build - TypeScript Missing (2025-12-18)
+**Issue**: Next.js Docker build failing during configuration transpilation  
+**Error Message**: `Failed to transpile "next.config.ts". Error: Cannot find module 'typescript'`  
+**Root Cause**: 
+- Next.js 16 uses TypeScript config file (`next.config.ts`)
+- TypeScript is a devDependency in `package.json`
+- Dockerfile was using `npm ci --omit=dev` in deps stage
+- This excluded devDependencies including TypeScript
+- Next.js needs TypeScript at build time to transpile config
+
+**Fix Applied**:
+```dockerfile
+# Before:
+RUN npm ci --omit=dev
+
+# After:
+RUN npm ci
+```
+
+**Why This is Safe**:
+- ✅ devDependencies only in build stages (deps, builder)
+- ✅ Final runner stage only has built Next.js output
+- ✅ TypeScript NOT included in production image
+- ✅ Image size stays small (~150MB)
+- ✅ Multi-stage build keeps production clean
+
+**Build Command**: `docker build -t frontend:latest frontend/`
+
 ### Fixed Maven Compiler Plugin for Java 21 (2025-12-18)
 **Issue**: Docker build failing during Maven compilation  
 **Error Message**: `Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.11.0:compile (default-compile) on project jboss-kitchensink: Fatal error compiling: error: release version 21 not supported`  
