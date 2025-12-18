@@ -43,3 +43,7 @@ services:
 networks:
   devcontainer_fullstack-network:
     external: true
+    # Note: If you get "network not found" error, you have two options:
+    # 1. Run with sudo: sudo docker compose -f docker-compose-backend-prebuilt.yml up -d
+    # 2. Or change 'external: true' to 'external: false' to create a new network
+    #    (but this won't connect to existing MySQL - you'll need to start MySQL too)

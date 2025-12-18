@@ -29,25 +29,32 @@ Click **"Reopen in Container"** when prompted.
 
 ## Step 2: Launch Backend
 
-From VS Code terminal:
+From VS Code terminal (inside devcontainer):
 
 ```bash
-# Option 1: Automated script (RECOMMENDED - builds JAR automatically)
+# Option 1: Automated script with permission handling (RECOMMENDED)
+./launch-backend.sh
+
+# Option 2: Older automated script (may have permission issues)
 ./start-backend.sh
 
-# Option 2: Manual with pre-built JAR
-./build-backend-jar.sh
-docker compose -f docker-compose-backend-prebuilt.yml up -d
+# Option 3: Manual with sudo (from devcontainer)
+cd kitchensink && ./gradlew clean build -x test && cd ..
+sudo docker compose -f docker-compose-backend-prebuilt.yml up -d
 
-# Option 3: Original (may fail with Maven Central 403 error)
-docker compose -f docker-compose-backend.yml up -d
+# Option 4: Manual without sudo (from host machine)
+cd kitchensink && ./gradlew clean build -x test && cd ..
+docker compose -f docker-compose-backend-prebuilt.yml up -d
 ```
+
+**⚠️ Getting "network not found" error?**  
+Use `./launch-backend.sh` (handles permissions automatically) or see [NETWORK_TROUBLESHOOTING.md](./NETWORK_TROUBLESHOOTING.md)
 
 **⚠️ Getting "JAR not found" error?**  
 Make sure to build the JAR first: `./build-backend-jar.sh`
 
 **⚠️ Getting Maven Central 403 errors?**  
-Use Option 1 (`./start-backend.sh`) or see [BACKEND_LAUNCH_TROUBLESHOOTING.md](./BACKEND_LAUNCH_TROUBLESHOOTING.md)
+Use pre-built JAR approach or see [BACKEND_LAUNCH_TROUBLESHOOTING.md](./BACKEND_LAUNCH_TROUBLESHOOTING.md)
 
 Wait 60-90 seconds for backend to become healthy.
 
