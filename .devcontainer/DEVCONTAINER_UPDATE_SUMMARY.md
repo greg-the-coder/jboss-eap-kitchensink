@@ -1,6 +1,7 @@
 # DevContainer Update Summary: Full-Stack Support
 
 **Date**: 2025-12-18  
+**Last Updated**: 2025-12-18  
 **Update**: Enhanced .devcontainer to support both backend and frontend development
 
 ---
@@ -10,6 +11,28 @@
 The .devcontainer specification has been updated to provide a complete full-stack development environment supporting:
 - **Backend**: Java 17, Spring Boot 3.x, Gradle 8.5, Maven 3.9.6
 - **Frontend**: Node.js 20.x (LTS), npm, yarn, pnpm, TypeScript, Next.js 16
+
+---
+
+## 🐛 Bug Fixes (Latest)
+
+### Fixed updateContentCommand Error
+**Issue**: `./gradlew: not found` error when running updateContentCommand  
+**Root Cause**: The `updateContentCommand` was trying to use `./gradlew` before it was created by `postCreateCommand`  
+**Fix**: 
+- Updated `updateContentCommand` to check if `./gradlew` exists before using it
+- Falls back to system `gradle` command if wrapper doesn't exist
+- Wrapped commands in `bash -c` for proper shell execution
+
+**Before**:
+```json
+"updateContentCommand": "cd /workspace/kitchensink && ./gradlew dependencies --refresh-dependencies && cd /workspace/frontend && npm update"
+```
+
+**After**:
+```json
+"updateContentCommand": "bash -c 'cd /workspace/kitchensink && (test -f ./gradlew && ./gradlew dependencies --refresh-dependencies || gradle dependencies --refresh-dependencies) && cd /workspace/frontend && npm update'"
+```
 
 ---
 

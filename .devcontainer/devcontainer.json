@@ -217,7 +217,7 @@
     },
     
     // Commands to run after container is created
-    "postCreateCommand": "cd /workspace/kitchensink && gradle wrapper --gradle-version 8.5 && ./gradlew --version && cd /workspace/frontend && npm install",
+    "postCreateCommand": "bash -c 'cd /workspace/kitchensink && gradle wrapper --gradle-version 8.5 && ./gradlew --version && cd /workspace/frontend && npm install'",
     
     // Commands to run when starting the container
     "postStartCommand": "echo '✅ Full-stack development environment ready! Backend (Java 17) + Frontend (Node.js 20)'",
@@ -240,6 +240,6 @@
     // User to run as inside the container
     "remoteUser": "root",
     
-    // Lifecycle scripts
-    "updateContentCommand": "cd /workspace/kitchensink && ./gradlew dependencies --refresh-dependencies && cd /workspace/frontend && npm update"
+    // Lifecycle scripts - Update dependencies when container is rebuilt
+    "updateContentCommand": "bash -c 'cd /workspace/kitchensink && (test -f ./gradlew && ./gradlew dependencies --refresh-dependencies || gradle dependencies --refresh-dependencies) && cd /workspace/frontend && npm update'"
 }
