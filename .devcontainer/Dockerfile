@@ -15,6 +15,7 @@ RUN apt-get update && apt-get install -y \
     netcat \
     iputils-ping \
     net-tools \
+    socat \
     fortune-mod \
     cowsay \
     lolcat \

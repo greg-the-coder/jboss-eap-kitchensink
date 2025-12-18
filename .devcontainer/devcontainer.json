@@ -53,35 +53,34 @@
         }
     },
     
-    "forwardPorts": [3000, 8080, 3306, 5005],
+    "forwardPorts": [3000, 8080, 5005],
     
     "portsAttributes": {
         "3000": {
-            "label": "Frontend (Container)",
+            "label": "Frontend (Proxied)",
             "onAutoForward": "notify"
         },
         "8080": {
-            "label": "Backend (Container)",
+            "label": "Backend (Proxied)", 
             "onAutoForward": "notify"
         },
-        "3306": {
-            "label": "MySQL Database",
-            "onAutoForward": "silent"
-        },
         "5005": {
-            "label": "Java Debug",
+            "label": "Java Debug (Proxied)",
             "onAutoForward": "silent"
         }
     },
     
-    "postCreateCommand": "cd /workspace && chmod +x *.sh && cd frontend && npm install",
+    "postCreateCommand": "cd /workspace && chmod +x *.sh && cd frontend && npm install && cd /workspace/.devcontainer && chmod +x setup-port-forwarding.sh",
     
-    "postStartCommand": "echo '✅ Devcontainer ready! Backend API: http://localhost:8080, Frontend: http://localhost:3000, MySQL: localhost:3306'",
+    "postStartCommand": "/workspace/.devcontainer/setup-port-forwarding.sh && echo '✅ Devcontainer ready! Frontend: http://localhost:3000, Backend: http://localhost:8080'",
     
     "remoteEnv": {
         "JAVA_HOME": "/opt/java/openjdk",
         "SPRING_PROFILES_ACTIVE": "dev",
-        "NEXT_PUBLIC_API_URL": "http://localhost:8080"
+        "NEXT_PUBLIC_API_URL": "http://localhost:8080",
+        "FRONTEND_URL": "http://localhost:3000",
+        "BACKEND_URL": "http://localhost:8080",
+        "DATABASE_URL": "jdbc:mysql://mysql:3306/kitchensink"
     },
     
     "remoteUser": "root"
