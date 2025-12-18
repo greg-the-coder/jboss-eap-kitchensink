@@ -14,7 +14,8 @@
                 "esbenp.prettier-vscode",
                 "bradlc.vscode-tailwindcss",
                 "ms-azuretools.vscode-docker",
-                "redhat.vscode-yaml"
+                "redhat.vscode-yaml",
+                "amazonwebservices.amazon-q-vscode"
             ],
             "settings": {
                 "java.home": "/opt/java/openjdk",
