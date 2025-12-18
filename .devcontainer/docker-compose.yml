@@ -17,74 +17,17 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
-      postgres:
-        condition: service_healthy
-      backend:
-        condition: service_started
-      frontend:
-        condition: service_started
     # Port forwarding for accessing services from host
     ports:
-      - "3000:3000"  # Frontend Next.js
-      - "8080:8080"  # Backend Spring Boot
       - "3306:3306"  # MySQL
-      - "5432:5432"  # PostgreSQL
+      - "8080:8080"  # Backend Spring Boot (manual)
+      - "3000:3000"  # Frontend Next.js (manual)
       - "5005:5005"  # Java debug port
     networks:
-      - fullstack-network
+      - kitchensink-network
     command: -c "sleep infinity"
 
-  # Backend Spring Boot application
-  backend:
-    build:
-      context: ../kitchensink
-      dockerfile: Dockerfile
-    environment:
-      SPRING_PROFILES_ACTIVE: dev
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/kitchensink
-      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
-      SPRING_DATASOURCE_USERNAME: kitchensink
-      SPRING_DATASOURCE_PASSWORD: kitchensink
-      SPRING_JPA_HIBERNATE_DDL_AUTO: update
-      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MySQLDialect
-      JAVA_OPTS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
-    depends_on:
-      mysql:
-        condition: service_healthy
-    networks:
-      - fullstack-network
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:8080/actuator/health || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 10
-      start_period: 90s
-
-  # Frontend Next.js application
-  frontend:
-    build:
-      context: ../frontend
-      dockerfile: Dockerfile
-      args:
-        NEXT_PUBLIC_API_URL: http://backend:8080
-    environment:
-      NEXT_PUBLIC_API_URL: http://localhost:8080
-      NODE_ENV: production
-    depends_on:
-      backend:
-        condition: service_healthy
-    networks:
-      - fullstack-network
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:3000/ || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-      start_period: 60s
-
-  # MySQL database for production profile testing
+  # MySQL database
   mysql:
     image: mysql:8.0
     environment:
@@ -96,7 +39,7 @@ services:
       - mysql-data:/var/lib/mysql
       - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
     networks:
-      - fullstack-network
+      - kitchensink-network
     command: --default-authentication-plugin=mysql_native_password
     restart: unless-stopped
     healthcheck:
@@ -105,32 +48,12 @@ services:
       timeout: 5s
       retries: 5
 
-  # PostgreSQL database for alternative testing
-  postgres:
-    image: postgres:16-bookworm
-    environment:
-      POSTGRES_DB: kitchensink
-      POSTGRES_USER: kitchensink
-      POSTGRES_PASSWORD: kitchensink
-    volumes:
-      - postgres-data:/var/lib/postgresql/data
-    networks:
-      - fullstack-network
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U kitchensink"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
 networks:
-  fullstack-network:
+  kitchensink-network:
     driver: bridge
 
 volumes:
   mysql-data:
-    driver: local
-  postgres-data:
     driver: local
   gradle-cache:
     driver: local

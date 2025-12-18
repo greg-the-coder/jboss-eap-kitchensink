@@ -1,5 +1,5 @@
 {
-    "name": "JBoss EAP Kitchensink Full-Stack",
+    "name": "JBoss EAP Kitchensink Development",
     "dockerComposeFile": "docker-compose.yml",
     "service": "workspace",
     "workspaceFolder": "/workspace",

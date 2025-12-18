@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  # Backend Spring Boot application
+  backend:
+    build:
+      context: ./kitchensink
+      dockerfile: Dockerfile
+    container_name: kitchensink-backend
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/kitchensink
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
+      SPRING_DATASOURCE_USERNAME: kitchensink
+      SPRING_DATASOURCE_PASSWORD: kitchensink
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MySQLDialect
+      JAVA_OPTS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
+    ports:
+      - "8080:8080"   # Backend API
+      - "5005:5005"   # Java debug port
+    networks:
+      - devcontainer_kitchensink-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:8080/actuator/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+      start_period: 90s
+
+networks:
+  devcontainer_kitchensink-network:
+    external: true
