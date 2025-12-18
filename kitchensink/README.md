@@ -1,116 +1,342 @@
-kitchensink: Assortment of technologies including Arquillian
-========================
-Author: Pete Muir  
-Level: Intermediate  
-Technologies: CDI, JSF, JPA, EJB, JAX-RS, BV  
-Summary: The `kitchensink` quickstart demonstrates a Java EE 6 web-enabled database application using JSF, CDI, EJB, JPA and Bean Validation.  
-Target Product: JBoss EAP  
-Source: <https://github.com/jboss-developer/jboss-eap-quickstarts/>  
+# Kitchensink: Spring Boot Migration
 
-What is it?
------------
+**Author:** Pete Muir (Original), Spring Boot Migration Team  
+**Level:** Intermediate  
+**Technologies:** Spring Boot 3.2, Spring Data JPA, Spring Security, Spring MVC, Bean Validation, H2/MySQL  
+**Summary:** The `kitchensink` application demonstrates a modern Spring Boot 3.x web application with REST API, JPA persistence, and security. This is a migration from the original Java EE 6 JBoss EAP quickstart.  
+**Target Platform:** Spring Boot 3.2+ with Java 21  
+**Source:** Migrated from [JBoss EAP Quickstarts](https://github.com/jboss-developer/jboss-eap-quickstarts/)
 
-The `kitchensink` quickstart is a deployable Maven 3 project designed to help you get your foot in the door developing with Java EE 6 on Red Hat JBoss Enterprise Application Platform. 
+## What is it?
 
-It demonstrates how to create a compliant Java EE 6 application using JSF 2.1, CDI 1.0, JAX-RS, EJB 3.1, JPA 2.0 and Bean Validation 1.0. It also includes a persistence unit and some sample persistence and transaction code to introduce you to database access in enterprise Java. 
+The `kitchensink` application is a Spring Boot 3.x project that demonstrates modern Java enterprise development practices. It has been migrated from the original Java EE 6 JBoss EAP quickstart to showcase:
 
-_Note: This quickstart uses the H2 database included with Red Hat JBoss Enterprise Application Platform 6. It is a lightweight, relational example datasource that is used for examples only. It is not robust or scalable, is not supported, and should NOT be used in a production environment!_
+- **Spring Boot 3.2** with auto-configuration and embedded server
+- **Spring Data JPA** for simplified data access
+- **Spring MVC REST** controllers for RESTful web services
+- **Spring Security** for authentication and authorization
+- **Bean Validation** with Jakarta validation annotations
+- **Containerization** with Docker and multi-stage builds
+- **Production-ready features** with Spring Boot Actuator
 
-_Note: This quickstart uses a `*-ds.xml` datasource configuration file for convenience and ease of database configuration. These files are deprecated in JBoss EAP 6.4 and should not be used in a production environment. Instead, you should configure the datasource using the Management CLI or Management Console. Datasource configuration is documented in the [Administration and Configuration Guide](https://access.redhat.com/documentation/en-US/JBoss_Enterprise_Application_Platform/) for Red Hat JBoss Enterprise Application Platform._
+## Migration Summary
 
-System requirements
--------------------
+This application has been transformed from Java EE 6 to Spring Boot 3.x:
 
-The application this project produces is designed to be run on Red Hat JBoss Enterprise Application Platform 6.1 or later. 
+| Original Technology | Migrated To | Notes |
+|-------------------|-------------|-------|
+| JBoss EAP 6 | Spring Boot 3.2 | Embedded Tomcat server |
+| CDI | Spring IoC Container | Constructor-based dependency injection |
+| EJB @Stateless | @Service | Spring service components |
+| JAX-RS | Spring MVC @RestController | RESTful web services |
+| JPA 2.0 | Spring Data JPA | Simplified repository pattern |
+| JSF 2.1 | Static HTML + REST API | Modern frontend approach |
+| Bean Validation 1.0 | Jakarta Validation 3.0 | Updated validation annotations |
+| Java EE Security | Spring Security 6 | HTTP Basic authentication |
+| Arquillian Tests | Spring Boot Test | Integration testing |
 
-All you need to build this project is Java 6.0 (Java SDK 1.6) or later, Maven 3.0 or later.
+## System Requirements
 
- 
-Configure Maven
----------------
+- **Java:** 21 or later (LTS recommended)
+- **Maven:** 3.9 or later
+- **Docker:** Optional, for containerized deployment
+- **Memory:** Minimum 512MB RAM
 
-If you have not yet done so, you must [Configure Maven](https://github.com/jboss-developer/jboss-developer-shared-resources/blob/master/guides/CONFIGURE_MAVEN.md#configure-maven-to-build-and-deploy-the-quickstarts) before testing the quickstarts.
+## Quick Start
 
+### 1. Build and Run Locally
 
-Use of EAP_HOME
----------------
+```bash
+# Clone and navigate to project
+cd kitchensink
 
-In the following instructions, replace `EAP_HOME` with the actual path to your JBoss EAP 6 installation. The installation path is described in detail here: [Use of EAP_HOME and JBOSS_HOME Variables](https://github.com/jboss-developer/jboss-developer-shared-resources/blob/master/guides/USE_OF_EAP_HOME.md#use-of-eap_home-and-jboss_home-variables).
+# Build the application
+mvn clean package
 
+# Run the application
+java -jar target/jboss-kitchensink.jar
 
-Start the JBoss EAP Server
--------------------------
+# Or run with Maven
+mvn spring-boot:run
+```
 
-1. Open a command prompt and navigate to the root of the JBoss EAP directory.
-2. The following shows the command line to start the server:
+### 2. Access the Application
 
-        For Linux:   EAP_HOME/bin/standalone.sh
-        For Windows: EAP_HOME\bin\standalone.bat
+- **Web Interface:** http://localhost:8080
+- **REST API:** http://localhost:8080/rest/members
+- **Health Check:** http://localhost:8080/actuator/health
+- **Application Info:** http://localhost:8080/actuator/info
 
- 
-Build and Deploy the Quickstart
--------------------------
+### 3. Docker Deployment
 
-_NOTE: The following build command assumes you have configured your Maven user settings. If you have not, you must include Maven setting arguments on the command line. See [Build and Deploy the Quickstarts](https://github.com/jboss-developer/jboss-developer-shared-resources/blob/master/guides/BUILD_AND_DEPLOY.md#build-and-deploy-the-quickstarts) for complete instructions and additional options._
+```bash
+# Build Docker image
+docker build -t kitchensink:latest .
 
-1. Make sure you have started the JBoss EAP server as described above.
-2. Open a command prompt and navigate to the root directory of this quickstart.
-3. Type this command to build and deploy the archive:
+# Run container
+docker run -p 8080:8080 kitchensink:latest
 
-        mvn clean install jboss-as:deploy
+# Or use the runtime-optimized image
+docker build -f Dockerfile.runtime -t kitchensink:runtime .
+docker run -p 8080:8080 kitchensink:runtime
+```
 
-4. This will deploy `target/jboss-kitchensink.war` to the running instance of the server.
- 
+## Configuration
 
-Access the application 
----------------------
+### Application Profiles
 
-The application will be running at the following URL: <http://localhost:8080/jboss-kitchensink/>.
+The application supports multiple profiles:
 
+- **default:** H2 in-memory database
+- **dev:** H2 with file persistence (`application-dev.yml`)
+- **prod:** MySQL database (`application-prod.yml`)
+- **test:** H2 in-memory for testing (`application-test.yml`)
 
-Server Log: Expected warnings and errors
------------------------------------
+### Environment Variables
 
-_Note:_ You will see the following warnings in the server log. You can ignore these warnings.
+For production deployment, configure these environment variables:
 
-    JBAS010489: -ds.xml file deployments are deprecated. Support may be removed in a future version.
+```bash
+# Database Configuration
+SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3306/kitchensink
+SPRING_DATASOURCE_USERNAME=kitchensink_user
+SPRING_DATASOURCE_PASSWORD=your_password
 
-    HHH000431: Unable to determine H2 database version, certain features may not work
+# Security Configuration
+APP_SECURITY_USER_USERNAME=user
+APP_SECURITY_USER_PASSWORD=secure_password
+APP_SECURITY_ADMIN_USERNAME=admin
+APP_SECURITY_ADMIN_PASSWORD=admin_password
 
+# Server Configuration
+SERVER_PORT=8080
+```
 
-Undeploy the Archive
---------------------
+### Database Setup
 
-1. Make sure you have started the JBoss EAP server as described above.
-2. Open a command prompt and navigate to the root directory of this quickstart.
-3. When you are finished testing, type this command to undeploy the archive:
+#### H2 (Development)
+No setup required - uses in-memory database by default.
 
-        mvn jboss-as:undeploy
+#### MySQL (Production)
+```sql
+CREATE DATABASE kitchensink;
+CREATE USER 'kitchensink_user'@'%' IDENTIFIED BY 'your_password';
+GRANT ALL PRIVILEGES ON kitchensink.* TO 'kitchensink_user'@'%';
+FLUSH PRIVILEGES;
+```
 
+## REST API
 
-Run the Arquillian Tests 
--------------------------
+### Endpoints
 
-This quickstart provides Arquillian tests. By default, these tests are configured to be skipped as Arquillian tests require the use of a container. 
+| Method | Endpoint | Description | Authentication |
+|--------|----------|-------------|----------------|
+| GET | `/rest/members` | List all members | None |
+| GET | `/rest/members/{id}` | Get member by ID | None |
+| POST | `/rest/members` | Create new member | None |
+| GET | `/actuator/health` | Health check | None |
+| GET | `/actuator/info` | Application info | None |
 
-_NOTE: The following commands assume you have configured your Maven user settings. If you have not, you must include Maven setting arguments on the command line. See [Run the Arquillian Tests](https://github.com/jboss-developer/jboss-developer-shared-resources/blob/master/guides/RUN_ARQUILLIAN_TESTS.md#run-the-arquillian-tests) for complete instructions and additional options._
+### Example Usage
 
-1. Make sure you have started the JBoss EAP server as described above.
-2. Open a command prompt and navigate to the root directory of this quickstart.
-3. Type the following command to run the test goal with the following profile activated:
+```bash
+# List all members
+curl http://localhost:8080/rest/members
 
-        mvn clean test -Parq-jbossas-remote 
+# Create a new member
+curl -X POST http://localhost:8080/rest/members \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "John Doe",
+    "email": "john@example.com",
+    "phoneNumber": "1234567890"
+  }'
 
+# Get member by ID
+curl http://localhost:8080/rest/members/1
+```
 
-Run the Quickstart in Red Hat JBoss Developer Studio or Eclipse
--------------------------------------
-You can also start the server and deploy the quickstarts or run the Arquillian tests from Eclipse using JBoss tools. For general information about how to import a quickstart, add a JBoss EAP server, and build and deploy a quickstart, see [Use JBoss Developer Studio or Eclipse to Run the Quickstarts](https://github.com/jboss-developer/jboss-developer-shared-resources/blob/master/guides/USE_JBDS.md#use-jboss-developer-studio-or-eclipse-to-run-the-quickstarts) 
+## Testing
 
+### Run Unit Tests
+```bash
+mvn test
+```
 
-Debug the Application
-------------------------------------
+### Run Integration Tests
+```bash
+mvn verify
+```
 
-If you want to debug the source code of any library in the project, run the following command to pull the source into your local repository. The IDE should then detect it.
+### Test with Different Profiles
+```bash
+# Test with dev profile
+mvn test -Dspring.profiles.active=dev
 
-    mvn dependency:sources
-   
+# Test with production-like settings
+mvn test -Dspring.profiles.active=prod
+```
+
+## Security
+
+The application includes Spring Security with:
+
+- **HTTP Basic Authentication** for API access (configurable)
+- **CORS support** for cross-origin requests
+- **Security headers** (HSTS, X-Frame-Options, etc.)
+- **Actuator endpoint protection**
+
+For production:
+- Enable HTTPS/TLS
+- Use external authentication provider (OAuth2, LDAP)
+- Configure proper CORS origins
+- Use database-backed user management
+
+## Monitoring and Operations
+
+### Health Checks
+- **Liveness:** `/actuator/health/liveness`
+- **Readiness:** `/actuator/health/readiness`
+- **Overall Health:** `/actuator/health`
+
+### Metrics
+- **Application Metrics:** `/actuator/metrics`
+- **JVM Metrics:** Built-in with Micrometer
+
+### Logging
+Structured logging with configurable levels:
+```properties
+logging.level.org.jboss.as.quickstarts.kitchensink=DEBUG
+logging.level.org.springframework.security=INFO
+```
+
+## Deployment Options
+
+### 1. Standalone JAR
+```bash
+java -jar target/jboss-kitchensink.jar
+```
+
+### 2. Docker Container
+```bash
+docker run -p 8080:8080 kitchensink:latest
+```
+
+### 3. Kubernetes
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kitchensink
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: kitchensink
+  template:
+    metadata:
+      labels:
+        app: kitchensink
+    spec:
+      containers:
+      - name: kitchensink
+        image: kitchensink:latest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: "prod"
+```
+
+### 4. OpenShift
+The application includes OpenShift build configurations in `.openshift/` directory.
+
+## Development
+
+### Project Structure
+```
+src/
+├── main/
+│   ├── java/org/jboss/as/quickstarts/kitchensink/
+│   │   ├── KitchensinkApplication.java    # Spring Boot main class
+│   │   ├── config/                        # Configuration classes
+│   │   ├── data/                          # Repository interfaces
+│   │   ├── model/                         # JPA entities
+│   │   ├── rest/                          # REST controllers
+│   │   ├── service/                       # Business services
+│   │   └── exception/                     # Exception handling
+│   ├── resources/
+│   │   ├── application.properties         # Main configuration
+│   │   ├── application-*.yml             # Profile-specific config
+│   │   └── import.sql                    # Sample data
+│   └── webapp/                           # Static web resources
+└── test/                                 # Test classes
+```
+
+### Key Classes
+
+- **KitchensinkApplication:** Spring Boot main class
+- **Member:** JPA entity with validation annotations
+- **MemberRepository:** Spring Data JPA repository
+- **MemberResourceRESTService:** REST controller
+- **MemberRegistration:** Business service
+- **SecurityConfig:** Spring Security configuration
+
+## Migration Notes
+
+### Breaking Changes from Java EE Version
+1. **URL Changes:** Application runs on port 8080 by default
+2. **API Endpoints:** REST endpoints moved to `/rest/members`
+3. **Authentication:** HTTP Basic auth instead of container security
+4. **Database:** H2 in-memory by default (was file-based)
+5. **Packaging:** JAR instead of WAR deployment
+
+### Compatibility
+- **Java:** Requires Java 21+ (was Java 6+)
+- **Database:** H2, MySQL, PostgreSQL supported
+- **Containers:** Docker, Kubernetes, OpenShift ready
+
+## Troubleshooting
+
+### Common Issues
+
+1. **Port Already in Use**
+   ```bash
+   # Change port
+   java -jar target/jboss-kitchensink.jar --server.port=8081
+   ```
+
+2. **Database Connection Issues**
+   ```bash
+   # Check database connectivity
+   curl http://localhost:8080/actuator/health
+   ```
+
+3. **Memory Issues**
+   ```bash
+   # Increase heap size
+   java -Xmx1g -jar target/jboss-kitchensink.jar
+   ```
+
+### Logs
+Application logs are available at:
+- Console output (default)
+- Configure file logging in `application.properties`
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make changes with tests
+4. Submit a pull request
+
+## License
+
+Licensed under the Apache License, Version 2.0. See LICENSE file for details.
+
+## Support
+
+For issues and questions:
+- Check the troubleshooting section
+- Review Spring Boot documentation
+- Open an issue in the project repository
