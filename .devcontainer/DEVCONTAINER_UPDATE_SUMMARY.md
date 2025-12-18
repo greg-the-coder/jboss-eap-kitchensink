@@ -9,12 +9,34 @@
 ## 📋 Overview
 
 The .devcontainer specification has been updated to provide a complete full-stack development environment supporting:
-- **Backend**: Java 17, Spring Boot 3.x, Gradle 8.5, Maven 3.9.6
+- **Backend**: Java 21, Spring Boot 3.x, Gradle 8.5, Maven 3.9.6
 - **Frontend**: Node.js 20.x (LTS), npm, yarn, pnpm, TypeScript, Next.js 16
 
 ---
 
 ## 🐛 Bug Fixes (Latest)
+
+### Upgraded Java Version to 21 (2025-12-18)
+**Issue**: VS Code Java extensions require Java 21 minimum, but container was using Java 17  
+**Error Message**: `The Java runtime set by 'java.jdt.ls.java.home' does not meet the minimum required version of '21'`  
+**Root Cause**: 
+- Dockerfile was using `eclipse-temurin:17-jdk-jammy` base image
+- Build configurations (build.gradle, pom.xml) specified Java 17
+- VS Code Java Language Server requires Java 21+ for full functionality
+
+**Fixes Applied**:
+- ✅ Dockerfile: Updated base image from `eclipse-temurin:17-jdk-jammy` → `eclipse-temurin:21-jdk-jammy`
+- ✅ build.gradle: Updated `sourceCompatibility = '17'` → `sourceCompatibility = '21'`
+- ✅ pom.xml: Updated `<java.version>17</java.version>` → `<java.version>21</java.version>`
+- ✅ All documentation: Updated Java 17 references to Java 21
+
+**Benefits**:
+- ✅ Full VS Code Java extension support (IntelliSense, debugging, refactoring)
+- ✅ Access to Java 21 features (Virtual Threads, Pattern Matching, Records, etc.)
+- ✅ Future-proof development environment
+- ✅ Better performance and security updates
+
+**Compatibility Note**: Spring Boot 3.2.1 fully supports Java 21, so no breaking changes expected.
 
 ### Fixed Gradle Project Directory Error (2025-12-18)
 **Issue**: `Project directory '/workspace/kitchensink' is not part of the build defined by settings file '/workspace/settings.gradle'`  
@@ -144,7 +166,7 @@ ENV NPM_CONFIG_CACHE=/workspace/.npm
 ```json
 "postCreateCommand": "cd /workspace/kitchensink && gradle wrapper --gradle-version 8.5 && ./gradlew --version && cd /workspace/frontend && npm install",
 
-"postStartCommand": "echo '✅ Full-stack development environment ready! Backend (Java 17) + Frontend (Node.js 20)'"
+"postStartCommand": "echo '✅ Full-stack development environment ready! Backend (Java 21) + Frontend (Node.js 20)'"
 ```
 
 **Added Environment Variables:**
@@ -233,7 +255,7 @@ Complete quick start guide for full-stack development:
 ### For the Project
 
 1. **Reproducible Builds**: Eliminates "works on my machine" issues
-2. **Version Control**: Tool versions locked (Node 20, Java 17, Gradle 8.5)
+2. **Version Control**: Tool versions locked (Node 20, Java 21, Gradle 8.5)
 3. **Easy Testing**: Full stack can be tested together
 4. **Docker Integration**: Can build and test Docker images
 5. **Database Options**: H2, MySQL, PostgreSQL all available

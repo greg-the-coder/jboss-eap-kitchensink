@@ -220,7 +220,7 @@
     "postCreateCommand": "bash -c 'cd /workspace && gradle wrapper --gradle-version 8.5 && ./gradlew --version && cd /workspace/frontend && npm install'",
     
     // Commands to run when starting the container
-    "postStartCommand": "echo '✅ Full-stack development environment ready! Backend (Java 17) + Frontend (Node.js 20)'",
+    "postStartCommand": "echo '✅ Full-stack development environment ready! Backend (Java 21) + Frontend (Node.js 20)'",
     
     // Set environment variables
     "remoteEnv": {

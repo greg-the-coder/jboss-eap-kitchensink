@@ -15,12 +15,12 @@ Before you begin, ensure you have:
 ### Step 1: Verify Environment
 
 When the container opens, you should see a welcome message showing:
-- Backend: Java 17, Gradle 8.5, Maven 3.9.6
+- Backend: Java 21, Gradle 8.5, Maven 3.9.6
 - Frontend: Node.js 20.x, npm 10+
 
 Verify tools are available:
 ```bash
-java -version    # Should show Java 17
+java -version    # Should show Java 21
 node --version   # Should show Node.js 20.x
 npm --version    # Should show npm 10+
 gradle --version # Should show Gradle 8.5

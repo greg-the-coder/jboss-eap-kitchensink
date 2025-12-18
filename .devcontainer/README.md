@@ -5,7 +5,7 @@ This directory contains the development container configuration for the JBoss EA
 ## 🚀 Features
 
 ### Backend
-- **Java 17 (Eclipse Temurin)** - Latest LTS version with full JDK
+- **Java 21 (Eclipse Temurin)** - Latest LTS version with full JDK
 - **Gradle 8.5** - Primary build tool for the Spring Boot application
 - **Maven 3.9.6** - Alternative build tool
 - **Spring Boot 3.x** - Modern Java framework

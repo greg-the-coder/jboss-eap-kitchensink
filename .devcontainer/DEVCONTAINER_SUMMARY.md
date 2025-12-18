@@ -14,7 +14,7 @@ This devcontainer specification provides a complete, reproducible development en
 
 1. **`.devcontainer/Dockerfile`**
    - Base image: Eclipse Temurin JDK 17 (Ubuntu Jammy)
-   - Installs: Java 17, Gradle 8.5, Maven 3.9.6
+   - Installs: Java 21, Gradle 8.5, Maven 3.9.6
    - Tools: Git, curl, wget, vim, nano, zsh, oh-my-zsh
    - Fun utilities: fortune, cowsay, lolcat
    - Custom welcome message with quick commands
@@ -85,7 +85,7 @@ This devcontainer specification provides a complete, reproducible development en
 ## 🚀 Key Features
 
 ### Development Tools
-- ✅ **Java 17** (Eclipse Temurin JDK) - Latest LTS version
+- ✅ **Java 21** (Eclipse Temurin JDK) - Latest LTS version
 - ✅ **Gradle 8.5** - Primary build tool with wrapper support
 - ✅ **Maven 3.9.6** - Alternative build tool
 - ✅ **Git** - Version control with GitLens extension
@@ -308,7 +308,7 @@ For Coder users:
 Before considering dev container complete:
 - [x] Container builds successfully
 - [x] All tools installed and accessible
-- [x] Java 17 works correctly
+- [x] Java 21 works correctly
 - [x] Gradle 8.5 builds project
 - [x] Maven works as alternative
 - [x] MySQL starts and initializes

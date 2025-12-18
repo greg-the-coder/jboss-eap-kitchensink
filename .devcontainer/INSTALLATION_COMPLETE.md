@@ -9,7 +9,7 @@ A comprehensive devcontainer specification has been successfully created for the
 ### Core Configuration (9 files)
 ```
 .devcontainer/
-├── Dockerfile                    # Container image with Java 17, Gradle 8.5, Maven 3.9.6
+├── Dockerfile                    # Container image with Java 21, Gradle 8.5, Maven 3.9.6
 ├── devcontainer.json            # VS Code dev container configuration
 ├── docker-compose.yml           # Multi-service environment (workspace + databases)
 ├── init-db.sql                  # MySQL database initialization
@@ -28,7 +28,7 @@ DEVELOPMENT.md                   # Root-level development guide
 ## 🚀 What You Get
 
 ### Development Environment
-- ✅ **Java 17** (Eclipse Temurin JDK)
+- ✅ **Java 21** (Eclipse Temurin JDK)
 - ✅ **Gradle 8.5** with wrapper support
 - ✅ **Maven 3.9.6** as alternative
 - ✅ **Zsh shell** with oh-my-zsh
@@ -58,7 +58,7 @@ DEVELOPMENT.md                   # Root-level development guide
   - And more...
 
 - ✅ **Pre-configured Settings**
-  - Java 17 as default
+  - Java 21 as default
   - Gradle and Maven paths
   - Format on save
   - Optimized file watching

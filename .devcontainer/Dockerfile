@@ -1,7 +1,7 @@
 # Dockerfile for JBoss EAP Kitchensink Full-Stack Development Environment
 # Supports both Backend (Java/Spring Boot) and Frontend (Next.js/TypeScript)
 
-FROM eclipse-temurin:17-jdk-jammy
+FROM eclipse-temurin:21-jdk-jammy
 
 # Install essential tools
 RUN apt-get update && apt-get install -y \
@@ -80,7 +80,7 @@ ENV NPM_CONFIG_CACHE=/workspace/.npm
 RUN printf 'echo ""\n' >> ~/.zshrc && \
     printf 'echo "🚀 JBoss EAP Kitchensink Full-Stack Development Environment"\n' >> ~/.zshrc && \
     printf 'echo ""\n' >> ~/.zshrc && \
-    printf 'echo "Backend:  Java 17"\n' >> ~/.zshrc && \
+    printf 'echo "Backend:  Java 21"\n' >> ~/.zshrc && \
     printf 'echo "          Gradle 8.5"\n' >> ~/.zshrc && \
     printf 'echo "          Maven 3.9.6"\n' >> ~/.zshrc && \
     printf 'echo "Frontend: Node.js $(node --version)"\n' >> ~/.zshrc && \

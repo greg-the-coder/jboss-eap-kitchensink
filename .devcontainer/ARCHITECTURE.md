@@ -15,7 +15,7 @@
 │  │  │  │  │   Base: eclipse-temurin:17-jdk-jammy         │  │  │  │  │
 │  │  │  │  │                                               │  │  │  │  │
 │  │  │  │  │   Tools Installed:                           │  │  │  │  │
-│  │  │  │  │   • Java 17 (OpenJDK)                        │  │  │  │  │
+│  │  │  │  │   • Java 21 (OpenJDK)                        │  │  │  │  │
 │  │  │  │  │   • Gradle 8.5                               │  │  │  │  │
 │  │  │  │  │   • Maven 3.9.6                              │  │  │  │  │
 │  │  │  │  │   • Git, curl, wget                          │  │  │  │  │

@@ -6,7 +6,7 @@ plugins {
 
 group = 'org.jboss.quickstarts.eap'
 version = '6.4.0-SNAPSHOT'
-sourceCompatibility = '17'
+sourceCompatibility = '21'
 
 configurations {
     compileOnly {
