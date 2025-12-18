@@ -15,6 +15,9 @@ RUN mvn clean package -DskipTests -B
 # Stage 2: Runtime image
 FROM eclipse-temurin:21-jre-alpine
 
+# Install wget for health checks
+RUN apk add --no-cache wget
+
 # Create non-root user
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
