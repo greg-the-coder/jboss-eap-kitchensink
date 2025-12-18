@@ -30,41 +30,22 @@ echo -e "${YELLOW}Building JAR...${NC}"
 echo ""
 cd kitchensink
 
-# Detect build tool and build
-if [ -f "./gradlew" ]; then
-    echo "Using Gradle..."
-    ./gradlew clean build -x test
-    
-    # Gradle puts JAR in build/libs/, Docker expects it in target/
-    mkdir -p target
-    if [ -f "build/libs/jboss-kitchensink.jar" ]; then
-        cp build/libs/jboss-kitchensink.jar target/jboss-kitchensink.jar
-        echo ""
-        echo -e "${GREEN}✅ Copied JAR from build/libs/ to target/${NC}"
-    fi
-elif [ -f "pom.xml" ]; then
+# Build with Maven
+if [ -f "pom.xml" ]; then
     echo "Using Maven..."
     mvn clean package -DskipTests
     echo ""
 else
-    echo -e "${RED}Error: No build tool found${NC}"
-    echo "Expected: ./gradlew or pom.xml"
+    echo -e "${RED}Error: pom.xml not found${NC}"
+    echo "Expected: pom.xml in kitchensink directory"
     exit 1
 fi
 
 # Verify JAR exists
 if [ ! -f "target/jboss-kitchensink.jar" ]; then
     echo -e "${RED}❌ JAR not found in target/${NC}"
-    
-    # Check alternative location
-    if [ -f "build/libs/jboss-kitchensink.jar" ]; then
-        echo "Found in build/libs/, copying..."
-        mkdir -p target
-        cp build/libs/jboss-kitchensink.jar target/jboss-kitchensink.jar
-    else
-        echo "Build failed - JAR not created"
-        exit 1
-    fi
+    echo "Build failed - JAR not created"
+    exit 1
 fi
 
 # Success

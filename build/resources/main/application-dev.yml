@@ -1,24 +1,20 @@
 # Development Profile Configuration
 spring:
   datasource:
-    url: jdbc:h2:mem:kitchensink-dev
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
-  
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/kitchensink}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ${SPRING_DATASOURCE_USERNAME:kitchensink}
+    password: ${SPRING_DATASOURCE_PASSWORD:kitchensink}
   
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     show-sql: true
     properties:
       hibernate:
         format_sql: true
         use_sql_comments: true
+        dialect: org.hibernate.dialect.MySQLDialect
 
   security:
     user:

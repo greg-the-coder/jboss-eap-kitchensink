@@ -116,7 +116,7 @@ These fixes address the following exit criteria:
 
 To fully complete the transformation validation:
 
-1. Set up Java JDK 17+ and Maven/Gradle on host
+1. Set up Java JDK 17+ and Maven on host
 2. Execute full application build
 3. Migrate functional tests from Arquillian to Spring Boot Test
 4. Run and verify all tests pass

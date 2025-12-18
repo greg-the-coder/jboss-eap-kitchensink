@@ -143,7 +143,7 @@ This application demonstrates a complete migration from a traditional J2EE appli
 
 - **Java Development Kit (JDK)**: 17 or higher
 - **Node.js**: 18.x or higher
-- **Maven**: 3.8+ or **Gradle**: 8.5+
+- **Maven**: 3.8+
 - **Docker**: 20.x or higher (for containerized deployment)
 
 ### Optional
@@ -164,8 +164,7 @@ cd kitchensink
 # Run with Maven
 ./mvnw spring-boot:run -Dspring-boot.run.profiles=dev
 
-# OR with Gradle
-./gradlew bootRun --args='--spring.profiles.active=dev'
+
 ```
 
 Backend will start on: [http://localhost:8080](http://localhost:8080)
@@ -238,8 +237,7 @@ jboss-eap-kitchensink/
 │   │   │       └── application-prod.yml
 │   │   └── test/                   # Tests
 │   ├── Dockerfile                  # Backend Docker image
-│   ├── pom.xml                     # Maven dependencies
-│   └── build.gradle                # Gradle dependencies
+│   └── pom.xml                     # Maven dependencies
 │
 ├── frontend/                       # Next.js Frontend
 │   ├── src/

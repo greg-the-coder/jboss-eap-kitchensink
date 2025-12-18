@@ -45,8 +45,6 @@ if [ ! -f "$JAR_PATH" ]; then
     echo -e "${RED}❌ ERROR: JAR file not found at $JAR_PATH${NC}"
     echo -e "${YELLOW}You need to build the JAR first:${NC}"
     echo -e "  cd kitchensink"
-    echo -e "  ./gradlew clean build -x test"
-    echo -e "  ${YELLOW}OR${NC}"
     echo -e "  mvn clean package -DskipTests"
     echo -e "\n${YELLOW}Or use the build script:${NC}"
     echo -e "  ./build-backend-jar.sh"

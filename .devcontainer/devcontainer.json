@@ -9,7 +9,7 @@
             "extensions": [
                 "vscjava.vscode-java-pack",
                 "pivotal.vscode-spring-boot",
-                "vscjava.vscode-gradle",
+
                 "ms-vscode.vscode-typescript-next",
                 "esbenp.prettier-vscode",
                 "bradlc.vscode-tailwindcss",
@@ -26,15 +26,14 @@
                         "default": true
                     }
                 ],
-                "gradle.javaHome": "/opt/java/openjdk",
+
                 "editor.defaultFormatter": "esbenp.prettier-vscode",
                 "editor.formatOnSave": true,
                 "[java]": {
                     "editor.defaultFormatter": "redhat.java"
                 },
                 "files.exclude": {
-                    "**/.gradle": true,
-                    "**/build": true,
+                    "**/target": true,
                     "**/.next": true,
                     "**/node_modules": false
                 }
