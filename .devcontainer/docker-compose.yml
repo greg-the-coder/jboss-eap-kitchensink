@@ -8,21 +8,12 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ../:/workspace:cached
-      # Mount Gradle cache for faster builds
       - gradle-cache:/workspace/.gradle
-      # Mount Maven cache for faster builds
       - maven-cache:/root/.m2
-      # Mount npm cache for faster installs
       - npm-cache:/workspace/.npm
     depends_on:
       mysql:
         condition: service_healthy
-    # Port forwarding for accessing services from host
-    ports:
-      - "3306:3306"  # MySQL
-      - "8080:8080"  # Backend Spring Boot (manual)
-      - "3000:3000"  # Frontend Next.js (manual)
-      - "5005:5005"  # Java debug port
     networks:
       - kitchensink-network
     command: -c "sleep infinity"
@@ -54,10 +45,6 @@ networks:
 
 volumes:
   mysql-data:
-    driver: local
   gradle-cache:
-    driver: local
   maven-cache:
-    driver: local
   npm-cache:
-    driver: local

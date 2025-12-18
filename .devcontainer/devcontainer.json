@@ -1,5 +1,5 @@
 {
-    "name": "JBoss EAP Kitchensink Development",
+    "name": "Kitchensink Spring Boot + Next.js",
     "dockerComposeFile": "docker-compose.yml",
     "service": "workspace",
     "workspaceFolder": "/workspace",
@@ -7,66 +7,16 @@
     "customizations": {
         "vscode": {
             "extensions": [
-                // Backend: Java development
                 "vscjava.vscode-java-pack",
-                "vscjava.vscode-spring-boot-dashboard",
-                "vscjava.vscode-spring-initializr",
                 "pivotal.vscode-spring-boot",
-                "vmware.vscode-boot-dev-pack",
-                
-                // Backend: Gradle and Maven
                 "vscjava.vscode-gradle",
-                "vscjava.vscode-maven",
-                
-                // Frontend: JavaScript/TypeScript
-                "dbaeumer.vscode-eslint",
-                "esbenp.prettier-vscode",
                 "ms-vscode.vscode-typescript-next",
+                "esbenp.prettier-vscode",
                 "bradlc.vscode-tailwindcss",
-                
-                // Frontend: React/Next.js
-                "dsznajder.es7-react-js-snippets",
-                "burkeholland.simple-react-snippets",
-                "styled-components.vscode-styled-components",
-                
-                // Frontend: Package management
-                "christian-kohler.npm-intellisense",
-                "eg2.vscode-npm-script",
-                
-                // Docker and Container support
                 "ms-azuretools.vscode-docker",
-                "ms-vscode-remote.remote-containers",
-                
-                // YAML, JSON, and configuration
-                "redhat.vscode-yaml",
-                "redhat.vscode-xml",
-                "tamasfe.even-better-toml",
-                
-                // Git and version control
-                "eamodio.gitlens",
-                "mhutchie.git-graph",
-                
-                // REST API testing
-                "humao.rest-client",
-                "42crunch.vscode-openapi",
-                
-                // Code quality
-                "sonarsource.sonarlint-vscode",
-                
-                // Markdown
-                "yzhang.markdown-all-in-one",
-                "davidanson.vscode-markdownlint",
-                
-                // Utilities
-                "usernamehw.errorlens",
-                "oderwat.indent-rainbow",
-                "gruntfuggly.todo-tree"
+                "redhat.vscode-yaml"
             ],
             "settings": {
-                "terminal.integrated.defaultProfile.linux": "zsh",
-                "terminal.integrated.fontFamily": "'Hack Nerd Font Mono'",
-                
-                // Java settings
                 "java.home": "/opt/java/openjdk",
                 "java.configuration.runtimes": [
                     {
@@ -75,106 +25,26 @@
                         "default": true
                     }
                 ],
-                "java.jdt.ls.java.home": "/opt/java/openjdk",
-                "java.import.gradle.home": "/opt/gradle-8.5",
-                "java.import.gradle.java.home": "/opt/java/openjdk",
-                "java.import.gradle.wrapper.enabled": true,
-                
-                // Spring Boot settings
-                "spring-boot.ls.java.home": "/opt/java/openjdk",
-                "spring.initializr.defaultLanguage": "Java",
-                
-                // Gradle settings
-                "gradle.newestGradleVersion": "8.5",
                 "gradle.javaHome": "/opt/java/openjdk",
-                
-                // TypeScript settings
-                "typescript.tsdk": "node_modules/typescript/lib",
-                "typescript.enablePromptUseWorkspaceTsdk": true,
-                "typescript.preferences.importModuleSpecifier": "relative",
-                
-                // ESLint settings
-                "eslint.enable": true,
-                "eslint.validate": [
-                    "javascript",
-                    "javascriptreact",
-                    "typescript",
-                    "typescriptreact"
-                ],
-                
-                // Prettier settings
                 "editor.defaultFormatter": "esbenp.prettier-vscode",
                 "editor.formatOnSave": true,
-                "[javascript]": {
-                    "editor.defaultFormatter": "esbenp.prettier-vscode"
-                },
-                "[javascriptreact]": {
-                    "editor.defaultFormatter": "esbenp.prettier-vscode"
-                },
-                "[typescript]": {
-                    "editor.defaultFormatter": "esbenp.prettier-vscode"
-                },
-                "[typescriptreact]": {
-                    "editor.defaultFormatter": "esbenp.prettier-vscode"
-                },
-                "[json]": {
-                    "editor.defaultFormatter": "esbenp.prettier-vscode"
-                },
-                "[jsonc]": {
-                    "editor.defaultFormatter": "esbenp.prettier-vscode"
-                },
-                
-                // Java formatting
-                "java.format.enabled": true,
                 "[java]": {
                     "editor.defaultFormatter": "redhat.java"
                 },
-                
-                // Tailwind CSS
-                "tailwindCSS.experimental.classRegex": [
-                    ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
-                    ["cn\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
-                ],
-                
-                // Editor settings
                 "files.exclude": {
                     "**/.gradle": true,
                     "**/build": true,
-                    "**/.classpath": true,
-                    "**/.project": true,
-                    "**/.settings": true,
-                    "**/.factorypath": true,
-                    "**/node_modules": false,
-                    "**/.next": true
-                },
-                "files.watcherExclude": {
-                    "**/.gradle/**": true,
-                    "**/build/**": true,
-                    "**/node_modules/**": true,
-                    "**/.next/**": true
-                },
-                
-                // Git settings
-                "git.autofetch": true,
-                "git.confirmSync": false,
-                
-                // Search settings
-                "search.exclude": {
-                    "**/node_modules": true,
                     "**/.next": true,
-                    "**/build": true,
-                    "**/.gradle": true
+                    "**/node_modules": false
                 }
             }
         }
     },
     
-    // Mount Docker socket for building container images
     "mounts": [
         "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
     ],
     
-    // Enable Docker-outside-of-Docker
     "features": {
         "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {
             "version": "latest",
@@ -182,73 +52,34 @@
         }
     },
     
-    // Exposed ports (handled by docker-compose workspace service)
-    // Ports are forwarded from workspace container to host
-    "forwardPorts": [],
-    
     "portsAttributes": {
-        "3000": {
-            "label": "Next.js Frontend (Dev)",
-            "onAutoForward": "notify",
-            "protocol": "http"
-        },
         "3001": {
-            "label": "Next.js Frontend (Container)",
-            "onAutoForward": "notify",
-            "protocol": "http"
-        },
-        "8080": {
-            "label": "Spring Boot Backend (Dev)",
-            "onAutoForward": "notify",
-            "protocol": "http"
+            "label": "Frontend (Container)",
+            "onAutoForward": "notify"
         },
         "8081": {
-            "label": "Spring Boot Backend (Container)",
-            "onAutoForward": "notify",
-            "protocol": "http"
+            "label": "Backend (Container)",
+            "onAutoForward": "notify"
         },
         "3306": {
             "label": "MySQL Database",
             "onAutoForward": "silent"
         },
-        "5432": {
-            "label": "PostgreSQL Database",
-            "onAutoForward": "silent"
-        },
-        "5005": {
-            "label": "Java Debug Port (Dev)",
-            "onAutoForward": "silent"
-        },
         "5006": {
-            "label": "Java Debug Port (Container)",
+            "label": "Java Debug",
             "onAutoForward": "silent"
         }
     },
     
-    // Commands to run after container is created
-    "postCreateCommand": "bash -c 'cd /workspace && gradle wrapper --gradle-version 8.5 && ./gradlew --version && cd /workspace/frontend && npm install'",
+    "postCreateCommand": "cd /workspace && chmod +x *.sh && cd frontend && npm install",
     
-    // Commands to run when starting the container
-    "postStartCommand": "echo '✅ Full-stack environment ready! Backend: http://localhost:8080 | Frontend: http://localhost:3000 | All services running via Docker Compose'",
+    "postStartCommand": "echo '✅ Devcontainer ready! Use ./launch-backend.sh and ./launch-frontend.sh to start services'",
     
-    // Set environment variables
     "remoteEnv": {
         "JAVA_HOME": "/opt/java/openjdk",
-        "GRADLE_HOME": "/opt/gradle-8.5",
-        "MAVEN_HOME": "/opt/apache-maven-3.9.6",
-        "NODE_ENV": "development",
         "SPRING_PROFILES_ACTIVE": "dev",
-        "DB_HOST": "localhost",
-        "DB_PORT": "3306",
-        "DB_NAME": "kitchensink",
-        "DB_USERNAME": "kitchensink",
-        "DB_PASSWORD": "kitchensink",
-        "NEXT_PUBLIC_API_URL": "http://localhost:8080"
+        "NEXT_PUBLIC_API_URL": "http://localhost:8081"
     },
     
-    // User to run as inside the container
-    "remoteUser": "root",
-    
-    // Lifecycle scripts - Update dependencies when container is rebuilt
-    "updateContentCommand": "bash -c 'cd /workspace && (test -f ./gradlew && ./gradlew dependencies --refresh-dependencies || gradle dependencies --refresh-dependencies) && cd /workspace/frontend && npm update'"
+    "remoteUser": "root"
 }
