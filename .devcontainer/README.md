@@ -1,6 +1,23 @@
 # Development Container Configuration
 
-This directory contains the development container configuration for the JBoss EAP Kitchensink Full-Stack application. The devcontainer provides a complete, reproducible development environment with all necessary tools pre-installed for both backend (Spring Boot) and frontend (Next.js) development.
+This directory contains the development container configuration for the JBoss EAP Kitchensink Full-Stack application. The devcontainer provides a **complete, automated full-stack environment** with all services running via Docker Compose.
+
+## 🎯 What Runs Automatically
+
+When you open this project in VS Code with Dev Containers, **5 containers start automatically**:
+
+| Service | Container | Port | Purpose |
+|---------|-----------|------|---------|
+| **Workspace** | Development environment | - | Your IDE workspace with all dev tools |
+| **Backend** | Spring Boot app | 8080 | REST API (auto-built from kitchensink/) |
+| **Frontend** | Next.js app | 3000 | Web UI (auto-built from frontend/) |
+| **MySQL** | Database | 3306 | Primary database for backend |
+| **PostgreSQL** | Database | 5432 | Alternative database option |
+
+**Key Point**: The backend and frontend applications are **automatically built and running** when the devcontainer starts. You can immediately access:
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:8080
+- Backend Health: http://localhost:8080/actuator/health
 
 ## 🚀 Features
 
@@ -86,6 +103,75 @@ This directory contains the development container configuration for the JBoss EA
 - `3306` - MySQL database
 - `5432` - PostgreSQL database
 - `5005` - Java remote debugging
+
+## 🔧 Managing Running Services
+
+All services are managed by Docker Compose and start automatically when you open the devcontainer.
+
+### View Running Services
+```bash
+# From within the devcontainer workspace
+docker-compose ps
+
+# Expected output:
+# NAME                STATUS              PORTS
+# backend             running (healthy)   8080/tcp
+# frontend            running (healthy)   3000/tcp
+# mysql               running (healthy)   3306/tcp
+# postgres            running (healthy)   5432/tcp
+# workspace           running             0.0.0.0:3000->3000, 8080->8080, etc.
+```
+
+### View Service Logs
+```bash
+# All services
+docker-compose logs -f
+
+# Specific service
+docker-compose logs -f backend
+docker-compose logs -f frontend
+docker-compose logs -f mysql
+```
+
+### Restart a Service
+```bash
+# Restart backend (e.g., after code changes)
+docker-compose restart backend
+
+# Restart frontend
+docker-compose restart frontend
+
+# Rebuild and restart (after Dockerfile changes)
+docker-compose up -d --build backend
+docker-compose up -d --build frontend
+```
+
+### Stop/Start Services
+```bash
+# Stop a service
+docker-compose stop backend
+
+# Start a service
+docker-compose start backend
+
+# Stop all services (except workspace)
+docker-compose stop backend frontend mysql postgres
+```
+
+### Check Service Health
+```bash
+# Backend health check
+curl http://localhost:8080/actuator/health
+
+# Frontend health check (if /api/health endpoint exists)
+curl http://localhost:3000/api/health
+
+# MySQL
+docker-compose exec mysql mysqladmin ping -h localhost -u root -proot
+
+# PostgreSQL
+docker-compose exec postgres pg_isready -U kitchensink
+```
 
 ## 🛠️ Getting Started
 

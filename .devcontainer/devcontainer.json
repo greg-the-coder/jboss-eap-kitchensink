@@ -182,14 +182,9 @@
         }
     },
     
-    // Exposed ports for the application and databases
-    "forwardPorts": [
-        3000,   // Next.js frontend dev server
-        8080,   // Spring Boot backend application
-        3306,   // MySQL
-        5432,   // PostgreSQL
-        5005    // Java debug port
-    ],
+    // Exposed ports (handled by docker-compose workspace service)
+    // Ports are forwarded from workspace container to host
+    "forwardPorts": [],
     
     "portsAttributes": {
         "3000": {
@@ -220,7 +215,7 @@
     "postCreateCommand": "bash -c 'cd /workspace && gradle wrapper --gradle-version 8.5 && ./gradlew --version && cd /workspace/frontend && npm install'",
     
     // Commands to run when starting the container
-    "postStartCommand": "echo '✅ Full-stack development environment ready! Backend (Java 21) + Frontend (Node.js 20)'",
+    "postStartCommand": "echo '✅ Full-stack environment ready! Backend: http://localhost:8080 | Frontend: http://localhost:3000 | All services running via Docker Compose'",
     
     // Set environment variables
     "remoteEnv": {
