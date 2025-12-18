@@ -27,11 +27,18 @@ fi
 echo -e "${YELLOW}[Step 1/3]${NC} Building JAR locally..."
 cd kitchensink
 
-# Check if Gradle wrapper exists
+# Check if Gradle wrapper exists, then check for Maven
 if [ -f "./gradlew" ]; then
     echo "Using Gradle..."
     ./gradlew clean build -x test
     BUILD_TOOL="Gradle"
+    
+    # Gradle puts JAR in build/libs/, need to copy to target/
+    mkdir -p target
+    if [ -f "build/libs/jboss-kitchensink.jar" ]; then
+        cp build/libs/jboss-kitchensink.jar target/jboss-kitchensink.jar
+        echo "Copied JAR from build/libs/ to target/"
+    fi
 elif [ -f "pom.xml" ]; then
     echo "Using Maven..."
     mvn clean package -DskipTests
@@ -41,14 +48,26 @@ else
     exit 1
 fi
 
-# Check if JAR was created
+# Check if JAR was created (in target/ directory for Docker compatibility)
 if [ -f "target/jboss-kitchensink.jar" ]; then
     JAR_SIZE=$(du -h target/jboss-kitchensink.jar | cut -f1)
     echo -e "${GREEN}✅ JAR built successfully${NC} (Size: $JAR_SIZE)"
+    echo "JAR location: kitchensink/target/jboss-kitchensink.jar"
 else
     echo -e "${RED}❌ JAR build failed${NC}"
     echo "Expected JAR: target/jboss-kitchensink.jar"
-    exit 1
+    echo ""
+    echo "Checking alternative locations..."
+    if [ -f "build/libs/jboss-kitchensink.jar" ]; then
+        echo "Found JAR in: build/libs/jboss-kitchensink.jar"
+        echo "Copying to target/ for Docker..."
+        mkdir -p target
+        cp build/libs/jboss-kitchensink.jar target/jboss-kitchensink.jar
+        echo -e "${GREEN}✅ JAR copied successfully${NC}"
+    else
+        echo "JAR not found in either location"
+        exit 1
+    fi
 fi
 
 cd ..

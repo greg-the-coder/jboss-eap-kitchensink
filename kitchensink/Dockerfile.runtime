@@ -11,6 +11,7 @@ RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 WORKDIR /app
 
 # Copy the pre-built JAR (built locally in dev container)
+# Note: Build context is ./kitchensink, so path is relative to that
 COPY --chown=appuser:appgroup target/jboss-kitchensink.jar app.jar
 
 # Switch to non-root user

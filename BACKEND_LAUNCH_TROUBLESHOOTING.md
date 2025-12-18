@@ -285,6 +285,78 @@ docker compose -f docker-compose-backend.yml down
 
 ## Additional Troubleshooting
 
+## Additional Troubleshooting
+
+### Issue: "target/jboss-kitchensink.jar not found" during Docker build
+
+**Error Message**:
+```
+failed to compute cache key: failed to calculate checksum of ref: 
+"/kitchensink/target/jboss-kitchensink.jar": not found
+```
+
+**Cause**: JAR not built before using `docker-compose-backend-prebuilt.yml`
+
+**Solutions**:
+
+#### Solution 1: Use Automated Script (Easiest)
+```bash
+./start-backend.sh
+```
+This script automatically builds the JAR before launching Docker.
+
+#### Solution 2: Build JAR Manually
+```bash
+# Option A: Using dedicated build script
+./build-backend-jar.sh
+
+# Option B: Manual build
+cd kitchensink
+
+# If Gradle
+./gradlew clean build -x test
+
+# If Maven  
+mvn clean package -DskipTests
+
+# Verify JAR exists
+ls -lh target/jboss-kitchensink.jar
+```
+
+#### Solution 3: Check JAR Location
+```bash
+# The JAR must be in kitchensink/target/ directory
+cd kitchensink
+
+# If using Gradle, JAR might be in build/libs/
+if [ -f "build/libs/jboss-kitchensink.jar" ]; then
+    mkdir -p target
+    cp build/libs/jboss-kitchensink.jar target/
+    echo "JAR copied to target/"
+fi
+
+# Verify
+ls -lh target/jboss-kitchensink.jar
+```
+
+### Issue: Gradle puts JAR in build/libs/ instead of target/
+
+**Cause**: Gradle and Maven use different output directories
+
+**Solution**: The `start-backend.sh` script automatically handles this by copying the JAR from `build/libs/` to `target/`. If building manually:
+
+```bash
+cd kitchensink
+./gradlew clean build -x test
+
+# Copy to target/ for Docker compatibility
+mkdir -p target
+cp build/libs/jboss-kitchensink.jar target/jboss-kitchensink.jar
+
+# Verify
+ls -lh target/jboss-kitchensink.jar
+```
+
 ### Issue: "target/jboss-kitchensink.jar not found"
 
 **Cause**: JAR not built before using pre-built approach

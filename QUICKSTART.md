@@ -32,12 +32,19 @@ Click **"Reopen in Container"** when prompted.
 From VS Code terminal:
 
 ```bash
-# Option 1: Automated script (RECOMMENDED)
+# Option 1: Automated script (RECOMMENDED - builds JAR automatically)
 ./start-backend.sh
 
-# Option 2: Manual launch
+# Option 2: Manual with pre-built JAR
+./build-backend-jar.sh
+docker compose -f docker-compose-backend-prebuilt.yml up -d
+
+# Option 3: Original (may fail with Maven Central 403 error)
 docker compose -f docker-compose-backend.yml up -d
 ```
+
+**⚠️ Getting "JAR not found" error?**  
+Make sure to build the JAR first: `./build-backend-jar.sh`
 
 **⚠️ Getting Maven Central 403 errors?**  
 Use Option 1 (`./start-backend.sh`) or see [BACKEND_LAUNCH_TROUBLESHOOTING.md](./BACKEND_LAUNCH_TROUBLESHOOTING.md)
