@@ -1,5 +1,8 @@
 # Exclude files from Docker build context
-target/
+# For runtime-only builds, we need target/*.jar
+target/*
+!target/*.jar
+
 .git/
 .gitignore
 *.md

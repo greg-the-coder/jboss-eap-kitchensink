@@ -1,0 +1,30 @@
+# Dockerignore for runtime-only build (Dockerfile.runtime)
+# We NEED the target/ directory for the pre-built JAR
+
+# Exclude source code and build artifacts except the final JAR
+src/
+target/*
+!target/jboss-kitchensink.jar
+
+# Exclude git and IDE files
+.git/
+.gitignore
+.idea/
+.vscode/
+*.iml
+*.swp
+*.bak
+
+# Exclude Maven wrapper
+.mvn/
+mvnw
+mvnw.cmd
+
+# Exclude docs and logs
+*.md
+*.log
+.DS_Store
+
+# Exclude environment files
+.env
+.env.local
