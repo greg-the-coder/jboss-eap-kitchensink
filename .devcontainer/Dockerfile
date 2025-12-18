@@ -1,4 +1,5 @@
-# Dockerfile for JBoss EAP Kitchensink Spring Boot Development Environment
+# Dockerfile for JBoss EAP Kitchensink Full-Stack Development Environment
+# Supports both Backend (Java/Spring Boot) and Frontend (Next.js/TypeScript)
 
 FROM eclipse-temurin:17-jdk-jammy
 
@@ -17,7 +18,29 @@ RUN apt-get update && apt-get install -y \
     fortune-mod \
     cowsay \
     lolcat \
+    ca-certificates \
+    gnupg \
     && rm -rf /var/lib/apt/lists/*
+
+# Install Node.js 20.x (LTS) for frontend development
+RUN mkdir -p /etc/apt/keyrings && \
+    curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
+    echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list && \
+    apt-get update && \
+    apt-get install -y nodejs && \
+    rm -rf /var/lib/apt/lists/*
+
+# Verify Node.js and npm installation
+RUN node --version && npm --version
+
+# Install global npm packages for frontend development
+RUN npm install -g \
+    npm@latest \
+    yarn \
+    pnpm \
+    typescript \
+    eslint \
+    prettier
 
 # Add games to PATH for fortune and cowsay
 ENV PATH="$PATH:/usr/games"
@@ -50,20 +73,34 @@ ENV PATH="${JAVA_HOME}/bin:${GRADLE_HOME}/bin:${MAVEN_HOME}/bin:${PATH}"
 # Configure Gradle to use project cache directory
 ENV GRADLE_USER_HOME=/workspace/.gradle
 
+# Configure npm cache directory
+ENV NPM_CONFIG_CACHE=/workspace/.npm
+
 # Set welcome message
 RUN printf 'echo ""\n' >> ~/.zshrc && \
-    printf 'echo "🚀 JBoss EAP Kitchensink Spring Boot Development Environment"\n' >> ~/.zshrc && \
+    printf 'echo "🚀 JBoss EAP Kitchensink Full-Stack Development Environment"\n' >> ~/.zshrc && \
     printf 'echo ""\n' >> ~/.zshrc && \
-    printf 'echo "Java:   $(java -version 2>&1 | head -n 1)"\n' >> ~/.zshrc && \
-    printf 'echo "Gradle: $(gradle --version | grep "Gradle" | head -n 1)"\n' >> ~/.zshrc && \
-    printf 'echo "Maven:  $(mvn --version | head -n 1)"\n' >> ~/.zshrc && \
+    printf 'echo "Backend:  Java 17"\n' >> ~/.zshrc && \
+    printf 'echo "          Gradle 8.5"\n' >> ~/.zshrc && \
+    printf 'echo "          Maven 3.9.6"\n' >> ~/.zshrc && \
+    printf 'echo "Frontend: Node.js $(node --version)"\n' >> ~/.zshrc && \
+    printf 'echo "          npm $(npm --version)"\n' >> ~/.zshrc && \
     printf 'echo ""\n' >> ~/.zshrc && \
-    printf 'echo "📦 Quick Commands:"\n' >> ~/.zshrc && \
-    printf 'echo "  gradle build           - Build the application"\n' >> ~/.zshrc && \
-    printf 'echo "  gradle test            - Run tests"\n' >> ~/.zshrc && \
-    printf 'echo "  gradle bootRun         - Run the application"\n' >> ~/.zshrc && \
-    printf 'echo "  docker-compose up -d   - Start MySQL database"\n' >> ~/.zshrc && \
-    printf 'echo "  docker-compose down    - Stop MySQL database"\n' >> ~/.zshrc && \
+    printf 'echo "📦 Backend Commands:"\n' >> ~/.zshrc && \
+    printf 'echo "  cd kitchensink && gradle build           - Build backend"\n' >> ~/.zshrc && \
+    printf 'echo "  cd kitchensink && gradle test            - Run backend tests"\n' >> ~/.zshrc && \
+    printf 'echo "  cd kitchensink && gradle bootRun         - Run Spring Boot app (port 8080)"\n' >> ~/.zshrc && \
+    printf 'echo ""\n' >> ~/.zshrc && \
+    printf 'echo "🎨 Frontend Commands:"\n' >> ~/.zshrc && \
+    printf 'echo "  cd frontend && npm install               - Install dependencies"\n' >> ~/.zshrc && \
+    printf 'echo "  cd frontend && npm run dev               - Run Next.js dev server (port 3000)"\n' >> ~/.zshrc && \
+    printf 'echo "  cd frontend && npm run build             - Build production frontend"\n' >> ~/.zshrc && \
+    printf 'echo "  cd frontend && npm run lint              - Lint frontend code"\n' >> ~/.zshrc && \
+    printf 'echo ""\n' >> ~/.zshrc && \
+    printf 'echo "🗄️  Database Commands:"\n' >> ~/.zshrc && \
+    printf 'echo "  docker-compose up -d mysql               - Start MySQL database"\n' >> ~/.zshrc && \
+    printf 'echo "  docker-compose up -d postgres            - Start PostgreSQL database"\n' >> ~/.zshrc && \
+    printf 'echo "  docker-compose down                      - Stop all databases"\n' >> ~/.zshrc && \
     printf 'echo ""\n' >> ~/.zshrc && \
     printf 'fortune | cowsay | lolcat\n' >> ~/.zshrc && \
     printf 'echo ""\n' >> ~/.zshrc

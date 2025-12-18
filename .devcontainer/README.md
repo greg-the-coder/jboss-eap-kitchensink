@@ -1,32 +1,68 @@
 # Development Container Configuration
 
-This directory contains the development container configuration for the JBoss EAP Kitchensink Spring Boot application. The devcontainer provides a complete, reproducible development environment with all necessary tools pre-installed.
+This directory contains the development container configuration for the JBoss EAP Kitchensink Full-Stack application. The devcontainer provides a complete, reproducible development environment with all necessary tools pre-installed for both backend (Spring Boot) and frontend (Next.js) development.
 
 ## 🚀 Features
 
+### Backend
 - **Java 17 (Eclipse Temurin)** - Latest LTS version with full JDK
 - **Gradle 8.5** - Primary build tool for the Spring Boot application
 - **Maven 3.9.6** - Alternative build tool
-- **MySQL 8.0** - Production-like database for testing
+- **Spring Boot 3.x** - Modern Java framework
+
+### Frontend
+- **Node.js 20.x (LTS)** - Latest long-term support version
+- **npm, yarn, pnpm** - Multiple package managers
+- **TypeScript** - Type-safe JavaScript
+- **Next.js 16** - React framework for production
+- **ESLint & Prettier** - Code quality and formatting
+
+### Infrastructure
+- **MySQL 8.0** - Production-like relational database
 - **PostgreSQL 16** - Alternative database option
 - **Docker-in-Docker** - Build and test container images
-- **VS Code Extensions** - Pre-configured Java, Spring Boot, and development tools
+- **VS Code Extensions** - Pre-configured for full-stack development
 - **Zsh Shell** - Enhanced shell experience with oh-my-zsh
 
 ## 📦 What's Included
 
-### Development Tools
+### Backend Tools
 - Java Development Kit (JDK) 17
 - Gradle 8.5 with wrapper support
 - Apache Maven 3.9.6
+- Spring Boot development tools
+- Java debugging support
+
+### Frontend Tools
+- Node.js 20.x (LTS)
+- npm 10+ (latest)
+- yarn (alternative package manager)
+- pnpm (fast, disk-efficient package manager)
+- TypeScript compiler
+- ESLint (linting)
+- Prettier (code formatting)
+
+### Common Tools
 - Git, curl, wget, and other utilities
 - vim, nano for text editing
 - Network tools (netcat, ping, net-tools)
+- jq for JSON processing
 
 ### VS Code Extensions
+
+#### Backend Extensions
 - **Java Extension Pack** - Complete Java development support
 - **Spring Boot Extensions** - Spring Boot development tools
 - **Gradle & Maven Support** - Build tool integration
+
+#### Frontend Extensions
+- **ESLint** - JavaScript/TypeScript linting
+- **Prettier** - Code formatting
+- **Tailwind CSS IntelliSense** - Tailwind CSS support
+- **ES7+ React/Redux/React-Native snippets** - React development
+- **npm Intellisense** - npm package autocomplete
+
+#### Common Extensions
 - **Docker Extension** - Container management
 - **GitLens** - Enhanced Git capabilities
 - **REST Client** - API testing
@@ -45,7 +81,8 @@ This directory contains the development container configuration for the JBoss EA
   - Password: `kitchensink`
 
 ### Ports
-- `8080` - Spring Boot application
+- `3000` - Next.js frontend development server
+- `8080` - Spring Boot backend application
 - `3306` - MySQL database
 - `5432` - PostgreSQL database
 - `5005` - Java remote debugging
@@ -72,6 +109,7 @@ This directory contains the development container configuration for the JBoss EA
 3. **Start developing!**
    - The terminal will open with zsh shell
    - All tools are pre-configured and ready to use
+   - Frontend dependencies will be automatically installed
 
 ### Using with Coder Cloud Development Environment
 
@@ -80,9 +118,9 @@ This directory contains the development container configuration for the JBoss EA
 3. **Wait for initialization** - Coder will build the container automatically
 4. **Access your IDE** through the browser or local VS Code
 
-## 🏗️ Building and Running
+## 🏗️ Backend Development
 
-### Build the Application
+### Build the Backend
 
 Using Gradle:
 ```bash
@@ -96,18 +134,20 @@ cd kitchensink
 mvn clean package
 ```
 
-### Run Tests
+### Run Backend Tests
 
 ```bash
+cd kitchensink
 gradle test
 # or
 mvn test
 ```
 
-### Run the Application
+### Run the Backend Application
 
 **With development profile (H2 in-memory database):**
 ```bash
+cd kitchensink
 gradle bootRun --args='--spring.profiles.active=dev'
 # or
 java -jar build/libs/jboss-kitchensink-*.jar --spring.profiles.active=dev
@@ -116,18 +156,96 @@ java -jar build/libs/jboss-kitchensink-*.jar --spring.profiles.active=dev
 **With MySQL database:**
 ```bash
 # Ensure MySQL container is running
-docker-compose -f .devcontainer/docker-compose.yml ps
+docker-compose -f .devcontainer/docker-compose.yml up -d mysql
 
 # Run application with production profile
+cd kitchensink
 gradle bootRun --args='--spring.profiles.active=prod'
 ```
 
-### Access the Application
+### Access the Backend
 
-- Application: http://localhost:8080
-- API Endpoints: http://localhost:8080/rest/members
+- REST API: http://localhost:8080/rest/members
 - Health Check: http://localhost:8080/actuator/health
 - H2 Console (dev profile): http://localhost:8080/h2-console
+
+## 🎨 Frontend Development
+
+### Install Frontend Dependencies
+
+```bash
+cd frontend
+npm install
+```
+
+### Run Frontend Development Server
+
+```bash
+cd frontend
+npm run dev
+```
+
+The frontend will be available at http://localhost:3000
+
+### Build Frontend for Production
+
+```bash
+cd frontend
+npm run build
+```
+
+### Run Frontend Linting
+
+```bash
+cd frontend
+npm run lint
+```
+
+### Frontend Environment Variables
+
+The frontend uses these environment variables (configured in `.env.local`):
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:8080
+```
+
+To connect to a different backend:
+```bash
+cd frontend
+NEXT_PUBLIC_API_URL=http://your-backend:8080 npm run dev
+```
+
+## 🚀 Full-Stack Development
+
+### Start Both Backend and Frontend
+
+**Terminal 1 (Backend):**
+```bash
+cd kitchensink
+gradle bootRun --args='--spring.profiles.active=dev'
+```
+
+**Terminal 2 (Frontend):**
+```bash
+cd frontend
+npm run dev
+```
+
+Now you can:
+- Access frontend UI: http://localhost:3000
+- Make API calls to backend: http://localhost:8080
+
+### Running with Databases
+
+**Start MySQL:**
+```bash
+docker-compose -f .devcontainer/docker-compose.yml up -d mysql
+```
+
+**Start PostgreSQL:**
+```bash
+docker-compose -f .devcontainer/docker-compose.yml up -d postgres
+```
 
 ## 🐳 Docker Compose Services
 
@@ -153,7 +271,9 @@ docker-compose -f .devcontainer/docker-compose.yml ps
 
 ## 🔧 Environment Variables
 
-The following environment variables are pre-configured:
+### Backend Environment Variables
+
+The following backend environment variables are pre-configured:
 
 - `JAVA_HOME=/opt/java/openjdk`
 - `GRADLE_HOME=/opt/gradle-8.5`
@@ -164,6 +284,11 @@ The following environment variables are pre-configured:
 - `DB_NAME=kitchensink`
 - `DB_USERNAME=kitchensink`
 - `DB_PASSWORD=kitchensink`
+
+### Frontend Environment Variables
+
+- `NODE_ENV=development`
+- `NEXT_PUBLIC_API_URL=http://localhost:8080`
 
 You can override these in your terminal or in `.devcontainer/devcontainer.json`.
 
@@ -195,10 +320,11 @@ jdbc:postgresql://localhost:5432/kitchensink
 
 ## 🐛 Debugging
 
-### Remote Debugging
+### Backend Debugging (Java)
 
 1. **Start application with debug enabled:**
    ```bash
+   cd kitchensink
    gradle bootRun --debug-jvm
    ```
 
@@ -207,23 +333,22 @@ jdbc:postgresql://localhost:5432/kitchensink
    - Select "Attach to Remote Java Application"
    - Debug port: 5005
 
-### Debug Configuration
+### Frontend Debugging (Next.js)
 
-Create `.vscode/launch.json`:
-```json
-{
-  "version": "0.2.0",
-  "configurations": [
-    {
-      "type": "java",
-      "name": "Debug Spring Boot App",
-      "request": "attach",
-      "hostName": "localhost",
-      "port": 5005
-    }
-  ]
-}
-```
+1. **Start frontend in debug mode:**
+   ```bash
+   cd frontend
+   npm run dev
+   ```
+
+2. **In VS Code:**
+   - Open the Debug panel
+   - Select "Next.js: debug server-side" or "Next.js: debug client-side"
+   - Press `F5`
+
+3. **Or use Browser DevTools:**
+   - Chrome: Open DevTools (F12)
+   - React DevTools extension recommended
 
 ## 📝 Customization
 
@@ -245,6 +370,15 @@ Edit `.devcontainer/Dockerfile` and add packages to the `apt-get install` comman
 RUN apt-get update && apt-get install -y \
     your-package \
     && rm -rf /var/lib/apt/lists/*
+```
+
+### Adding Global npm Packages
+
+Edit `.devcontainer/Dockerfile`:
+
+```dockerfile
+RUN npm install -g \
+    your-package
 ```
 
 ### Changing Database Configuration
@@ -275,8 +409,10 @@ If you make changes to the devcontainer configuration:
 
 - [VS Code Dev Containers Documentation](https://code.visualstudio.com/docs/devcontainers/containers)
 - [Spring Boot Documentation](https://spring.io/projects/spring-boot)
+- [Next.js Documentation](https://nextjs.org/docs)
 - [Gradle User Manual](https://docs.gradle.org/)
-- [Coder Documentation](https://coder.com/docs)
+- [Node.js Documentation](https://nodejs.org/docs/)
+- [TypeScript Documentation](https://www.typescriptlang.org/docs/)
 
 ## 🐛 Troubleshooting
 
@@ -294,21 +430,62 @@ If you make changes to the devcontainer configuration:
 
 ### Port conflicts
 
-- Check what's using the port: `lsof -i :8080`
-- Change port in `docker-compose.yml` or `application.properties`
+- Check what's using the port: `lsof -i :8080` or `lsof -i :3000`
+- Change port in `docker-compose.yml` or application configuration
 
-### Gradle/Maven issues
+### Backend (Gradle/Maven) issues
 
 - Clear Gradle cache: `rm -rf ~/.gradle/caches`
 - Clear Maven cache: `rm -rf ~/.m2/repository`
 - Refresh dependencies: `gradle --refresh-dependencies`
+
+### Frontend (npm) issues
+
+- Clear npm cache: `npm cache clean --force`
+- Delete node_modules: `rm -rf node_modules`
+- Reinstall dependencies: `npm install`
+- Check Node.js version: `node --version`
+
+### TypeScript errors
+
+- Check TypeScript version: `npx tsc --version`
+- Restart TypeScript server in VS Code: `Ctrl+Shift+P` → "TypeScript: Restart TS Server"
+
+## 🎯 Quick Reference
+
+### Backend Commands
+```bash
+cd kitchensink
+gradle build              # Build backend
+gradle test               # Run backend tests
+gradle bootRun            # Run Spring Boot app (port 8080)
+gradle clean              # Clean build artifacts
+```
+
+### Frontend Commands
+```bash
+cd frontend
+npm install               # Install dependencies
+npm run dev               # Run Next.js dev server (port 3000)
+npm run build             # Build for production
+npm run start             # Start production server
+npm run lint              # Lint code
+```
+
+### Database Commands
+```bash
+docker-compose up -d mysql      # Start MySQL
+docker-compose up -d postgres   # Start PostgreSQL
+docker-compose down             # Stop all services
+docker-compose logs -f mysql    # View MySQL logs
+```
 
 ## 🤝 Contributing
 
 When contributing changes to the devcontainer:
 
 1. Test the changes by rebuilding the container
-2. Verify all tools work as expected
+2. Verify all tools work as expected (both backend and frontend)
 3. Update this README with any new features or changes
 4. Document any breaking changes
 

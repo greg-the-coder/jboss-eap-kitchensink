@@ -1,5 +1,5 @@
 {
-    "name": "JBoss EAP Kitchensink Spring Boot",
+    "name": "JBoss EAP Kitchensink Full-Stack",
     "dockerComposeFile": "docker-compose.yml",
     "service": "workspace",
     "workspaceFolder": "/workspace",
@@ -7,36 +7,60 @@
     "customizations": {
         "vscode": {
             "extensions": [
-                // Java development
+                // Backend: Java development
                 "vscjava.vscode-java-pack",
                 "vscjava.vscode-spring-boot-dashboard",
                 "vscjava.vscode-spring-initializr",
                 "pivotal.vscode-spring-boot",
                 "vmware.vscode-boot-dev-pack",
                 
-                // Gradle and Maven
+                // Backend: Gradle and Maven
                 "vscjava.vscode-gradle",
                 "vscjava.vscode-maven",
+                
+                // Frontend: JavaScript/TypeScript
+                "dbaeumer.vscode-eslint",
+                "esbenp.prettier-vscode",
+                "ms-vscode.vscode-typescript-next",
+                "bradlc.vscode-tailwindcss",
+                
+                // Frontend: React/Next.js
+                "dsznajder.es7-react-js-snippets",
+                "burkeholland.simple-react-snippets",
+                "styled-components.vscode-styled-components",
+                
+                // Frontend: Package management
+                "christian-kohler.npm-intellisense",
+                "eg2.vscode-npm-script",
                 
                 // Docker and Container support
                 "ms-azuretools.vscode-docker",
                 "ms-vscode-remote.remote-containers",
                 
-                // YAML and configuration
+                // YAML, JSON, and configuration
                 "redhat.vscode-yaml",
                 "redhat.vscode-xml",
+                "tamasfe.even-better-toml",
                 
                 // Git and version control
                 "eamodio.gitlens",
+                "mhutchie.git-graph",
                 
                 // REST API testing
                 "humao.rest-client",
+                "42crunch.vscode-openapi",
                 
                 // Code quality
                 "sonarsource.sonarlint-vscode",
                 
                 // Markdown
-                "yzhang.markdown-all-in-one"
+                "yzhang.markdown-all-in-one",
+                "davidanson.vscode-markdownlint",
+                
+                // Utilities
+                "usernamehw.errorlens",
+                "oderwat.indent-rainbow",
+                "gruntfuggly.todo-tree"
             ],
             "settings": {
                 "terminal.integrated.defaultProfile.linux": "zsh",
@@ -64,6 +88,54 @@
                 "gradle.newestGradleVersion": "8.5",
                 "gradle.javaHome": "/opt/java/openjdk",
                 
+                // TypeScript settings
+                "typescript.tsdk": "node_modules/typescript/lib",
+                "typescript.enablePromptUseWorkspaceTsdk": true,
+                "typescript.preferences.importModuleSpecifier": "relative",
+                
+                // ESLint settings
+                "eslint.enable": true,
+                "eslint.validate": [
+                    "javascript",
+                    "javascriptreact",
+                    "typescript",
+                    "typescriptreact"
+                ],
+                
+                // Prettier settings
+                "editor.defaultFormatter": "esbenp.prettier-vscode",
+                "editor.formatOnSave": true,
+                "[javascript]": {
+                    "editor.defaultFormatter": "esbenp.prettier-vscode"
+                },
+                "[javascriptreact]": {
+                    "editor.defaultFormatter": "esbenp.prettier-vscode"
+                },
+                "[typescript]": {
+                    "editor.defaultFormatter": "esbenp.prettier-vscode"
+                },
+                "[typescriptreact]": {
+                    "editor.defaultFormatter": "esbenp.prettier-vscode"
+                },
+                "[json]": {
+                    "editor.defaultFormatter": "esbenp.prettier-vscode"
+                },
+                "[jsonc]": {
+                    "editor.defaultFormatter": "esbenp.prettier-vscode"
+                },
+                
+                // Java formatting
+                "java.format.enabled": true,
+                "[java]": {
+                    "editor.defaultFormatter": "redhat.java"
+                },
+                
+                // Tailwind CSS
+                "tailwindCSS.experimental.classRegex": [
+                    ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
+                    ["cn\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
+                ],
+                
                 // Editor settings
                 "files.exclude": {
                     "**/.gradle": true,
@@ -71,20 +143,28 @@
                     "**/.classpath": true,
                     "**/.project": true,
                     "**/.settings": true,
-                    "**/.factorypath": true
+                    "**/.factorypath": true,
+                    "**/node_modules": false,
+                    "**/.next": true
                 },
                 "files.watcherExclude": {
                     "**/.gradle/**": true,
-                    "**/build/**": true
+                    "**/build/**": true,
+                    "**/node_modules/**": true,
+                    "**/.next/**": true
                 },
-                
-                // Format on save
-                "editor.formatOnSave": true,
-                "java.format.enabled": true,
                 
                 // Git settings
                 "git.autofetch": true,
-                "git.confirmSync": false
+                "git.confirmSync": false,
+                
+                // Search settings
+                "search.exclude": {
+                    "**/node_modules": true,
+                    "**/.next": true,
+                    "**/build": true,
+                    "**/.gradle": true
+                }
             }
         }
     },
@@ -104,16 +184,23 @@
     
     // Exposed ports for the application and databases
     "forwardPorts": [
-        8080,   // Spring Boot application
+        3000,   // Next.js frontend dev server
+        8080,   // Spring Boot backend application
         3306,   // MySQL
         5432,   // PostgreSQL
         5005    // Java debug port
     ],
     
     "portsAttributes": {
+        "3000": {
+            "label": "Next.js Frontend",
+            "onAutoForward": "notify",
+            "protocol": "http"
+        },
         "8080": {
-            "label": "Spring Boot App",
-            "onAutoForward": "notify"
+            "label": "Spring Boot Backend",
+            "onAutoForward": "notify",
+            "protocol": "http"
         },
         "3306": {
             "label": "MySQL Database",
@@ -130,27 +217,29 @@
     },
     
     // Commands to run after container is created
-    "postCreateCommand": "cd /workspace/kitchensink && gradle wrapper --gradle-version 8.5 && ./gradlew --version",
+    "postCreateCommand": "cd /workspace/kitchensink && gradle wrapper --gradle-version 8.5 && ./gradlew --version && cd /workspace/frontend && npm install",
     
     // Commands to run when starting the container
-    "postStartCommand": "echo '✅ Development environment ready!'",
+    "postStartCommand": "echo '✅ Full-stack development environment ready! Backend (Java 17) + Frontend (Node.js 20)'",
     
     // Set environment variables
     "remoteEnv": {
         "JAVA_HOME": "/opt/java/openjdk",
         "GRADLE_HOME": "/opt/gradle-8.5",
         "MAVEN_HOME": "/opt/apache-maven-3.9.6",
+        "NODE_ENV": "development",
         "SPRING_PROFILES_ACTIVE": "dev",
         "DB_HOST": "localhost",
         "DB_PORT": "3306",
         "DB_NAME": "kitchensink",
         "DB_USERNAME": "kitchensink",
-        "DB_PASSWORD": "kitchensink"
+        "DB_PASSWORD": "kitchensink",
+        "NEXT_PUBLIC_API_URL": "http://localhost:8080"
     },
     
     // User to run as inside the container
     "remoteUser": "root",
     
     // Lifecycle scripts
-    "updateContentCommand": "cd /workspace/kitchensink && ./gradlew dependencies --refresh-dependencies"
+    "updateContentCommand": "cd /workspace/kitchensink && ./gradlew dependencies --refresh-dependencies && cd /workspace/frontend && npm update"
 }

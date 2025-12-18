@@ -12,6 +12,8 @@ services:
       - gradle-cache:/workspace/.gradle
       # Mount Maven cache for faster builds
       - maven-cache:/root/.m2
+      # Mount npm cache for faster installs
+      - npm-cache:/workspace/.npm
     depends_on:
       - mysql
       - postgres
@@ -28,9 +30,10 @@ services:
       MYSQL_USER: kitchensink
       MYSQL_PASSWORD: kitchensink
     ports:
-      - "3306:3306"
-      - "8080:8080"  # Application port
-      - "5005:5005"  # Debug port
+      - "3000:3000"  # Frontend Next.js dev server
+      - "3306:3306"  # MySQL database
+      - "8080:8080"  # Backend Spring Boot application
+      - "5005:5005"  # Java debug port
     volumes:
       - mysql-data:/var/lib/mysql
       - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
@@ -68,4 +71,6 @@ volumes:
   gradle-cache:
     driver: local
   maven-cache:
+    driver: local
+  npm-cache:
     driver: local

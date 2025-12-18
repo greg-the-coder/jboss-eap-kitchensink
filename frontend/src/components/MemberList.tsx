@@ -42,7 +42,15 @@ export function MemberList() {
           : bValue.localeCompare(aValue);
       }
       
-      return sortOrder === 'asc' ? aValue - bValue : bValue - aValue;
+      // Handle numeric comparison (for id field)
+      if (typeof aValue === 'number' && typeof bValue === 'number') {
+        return sortOrder === 'asc' ? aValue - bValue : bValue - aValue;
+      }
+      
+      // Default: convert to string and compare
+      return sortOrder === 'asc'
+        ? String(aValue).localeCompare(String(bValue))
+        : String(bValue).localeCompare(String(aValue));
     });
 
     return filtered;
