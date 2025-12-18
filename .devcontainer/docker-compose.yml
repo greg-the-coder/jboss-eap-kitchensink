@@ -1,6 +1,9 @@
+name: kitchensink-devcontainer
+
 services:
   # Development workspace container
   workspace:
+    container_name: kitchensink-workspace
     build:
       context: .
       dockerfile: Dockerfile
@@ -27,6 +30,7 @@ services:
 
   # MySQL database
   mysql:
+    container_name: kitchensink-mysql
     image: mysql:8.0
     environment:
       MYSQL_ROOT_PASSWORD: root
@@ -50,6 +54,7 @@ services:
 
   # Spring Boot Backend
   backend:
+    container_name: kitchensink-backend
     build:
       context: ../kitchensink
       dockerfile: Dockerfile
@@ -77,6 +82,7 @@ services:
 
   # Next.js Frontend
   frontend:
+    container_name: kitchensink-frontend
     build:
       context: ../frontend
       dockerfile: Dockerfile
