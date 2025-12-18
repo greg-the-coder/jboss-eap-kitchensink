@@ -70,9 +70,9 @@
         }
     },
     
-    "postCreateCommand": "cd /workspace && chmod +x *.sh && cd frontend && npm install && cd /workspace/.devcontainer && chmod +x setup-port-forwarding.sh",
+    "postCreateCommand": "cd /workspace && chmod +x *.sh && cd frontend && npm install",
     
-    "postStartCommand": "/workspace/.devcontainer/setup-port-forwarding.sh && echo '✅ Devcontainer ready! Frontend: http://localhost:3000, Backend: http://localhost:8080'",
+    "postStartCommand": "echo '✅ Devcontainer ready! Frontend: http://localhost:3000, Backend: http://localhost:8080'",
     
     "remoteEnv": {
         "JAVA_HOME": "/opt/java/openjdk",
