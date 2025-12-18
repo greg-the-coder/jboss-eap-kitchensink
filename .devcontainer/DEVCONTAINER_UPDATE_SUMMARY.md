@@ -16,23 +16,44 @@ The .devcontainer specification has been updated to provide a complete full-stac
 
 ## 🐛 Bug Fixes (Latest)
 
-### Fixed updateContentCommand Error
+### Fixed Gradle Project Directory Error (2025-12-18)
+**Issue**: `Project directory '/workspace/kitchensink' is not part of the build defined by settings file '/workspace/settings.gradle'`  
+**Root Cause**: Commands were executing in `/workspace/kitchensink` subdirectory, but the Gradle build is defined at `/workspace` root level  
+**Fix**: 
+- Changed `postCreateCommand` to run from `/workspace` (root) instead of `/workspace/kitchensink`
+- Changed `updateContentCommand` to run from `/workspace` (root)
+- Gradle wrapper is now created at the correct project root
+
+**Before**:
+```json
+"postCreateCommand": "bash -c 'cd /workspace/kitchensink && gradle wrapper --gradle-version 8.5 && ./gradlew --version && cd /workspace/frontend && npm install'"
+"updateContentCommand": "bash -c 'cd /workspace/kitchensink && (test -f ./gradlew && ./gradlew dependencies --refresh-dependencies || gradle dependencies --refresh-dependencies) && cd /workspace/frontend && npm update'"
+```
+
+**After**:
+```json
+"postCreateCommand": "bash -c 'cd /workspace && gradle wrapper --gradle-version 8.5 && ./gradlew --version && cd /workspace/frontend && npm install'"
+"updateContentCommand": "bash -c 'cd /workspace && (test -f ./gradlew && ./gradlew dependencies --refresh-dependencies || gradle dependencies --refresh-dependencies) && cd /workspace/frontend && npm update'"
+```
+
+**Project Structure**:
+```
+/workspace/                    # <- Root project directory (Gradle build root)
+├── settings.gradle            # <- Defines Gradle project
+├── build.gradle               # <- Root build file
+├── kitchensink/               # <- Spring Boot application (subproject)
+│   └── pom.xml                # <- Maven alternative
+└── frontend/                  # <- Next.js application
+    └── package.json
+```
+
+### Fixed updateContentCommand Error (2025-12-18)
 **Issue**: `./gradlew: not found` error when running updateContentCommand  
 **Root Cause**: The `updateContentCommand` was trying to use `./gradlew` before it was created by `postCreateCommand`  
 **Fix**: 
 - Updated `updateContentCommand` to check if `./gradlew` exists before using it
 - Falls back to system `gradle` command if wrapper doesn't exist
 - Wrapped commands in `bash -c` for proper shell execution
-
-**Before**:
-```json
-"updateContentCommand": "cd /workspace/kitchensink && ./gradlew dependencies --refresh-dependencies && cd /workspace/frontend && npm update"
-```
-
-**After**:
-```json
-"updateContentCommand": "bash -c 'cd /workspace/kitchensink && (test -f ./gradlew && ./gradlew dependencies --refresh-dependencies || gradle dependencies --refresh-dependencies) && cd /workspace/frontend && npm update'"
-```
 
 ---
 
