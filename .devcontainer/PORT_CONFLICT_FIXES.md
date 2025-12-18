@@ -30,6 +30,11 @@ The `workspace` container was incorrectly configured to expose the same ports as
 ### 4. Removed Obsolete Docker Compose Version
 - Removed `version: '3.8'` to eliminate deprecation warnings
 
+### 5. Removed Conflicting Docker Features
+- Removed `docker-outside-of-docker` feature from `devcontainer.json`
+- Removed conflicting mounts that were causing entrypoint conflicts
+- Simplified devcontainer configuration to work with docker-compose setup
+
 ## Result
 - All containers now start successfully without port conflicts
 - Services are accessible at:
