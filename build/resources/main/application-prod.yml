@@ -1,0 +1,53 @@
+# Production Profile Configuration
+spring:
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3306/kitchensink}
+    username: ${DB_USERNAME:kitchensink}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+  
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: false
+
+server:
+  shutdown: graceful
+  compression:
+    enabled: true
+    mime-types: text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json
+  
+# Consider enabling SSL in production:
+#  ssl:
+#    enabled: true
+#    key-store: ${SSL_KEY_STORE:classpath:keystore.p12}
+#    key-store-password: ${SSL_KEY_STORE_PASSWORD}
+#    key-store-type: PKCS12
+
+# CORS Configuration for Production
+# Set ALLOWED_ORIGINS environment variable with comma-separated production frontend URLs
+# Example: https://your-frontend.com,https://www.your-frontend.com
+cors:
+  allowed-origins: ${ALLOWED_ORIGINS:https://your-frontend.com}
+
+logging:
+  level:
+    root: WARN
+    org.jboss.as.quickstarts.kitchensink: INFO
+    org.springframework.web: WARN
+    org.hibernate: WARN
+
+management:
+  endpoint:
+    health:
+      show-details: never

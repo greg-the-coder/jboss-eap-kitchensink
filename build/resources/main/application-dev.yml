@@ -1,0 +1,43 @@
+# Development Profile Configuration
+spring:
+  datasource:
+    url: jdbc:h2:mem:kitchensink-dev
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+
+  security:
+    user:
+      # Development credentials - externalize via environment variables for security
+      # Set DEV_USERNAME and DEV_PASSWORD environment variables
+      name: ${DEV_USERNAME:dev}
+      password: ${DEV_PASSWORD:dev}
+
+# CORS Configuration for Development
+cors:
+  allowed-origins:
+    - http://localhost:3000
+    - http://127.0.0.1:3000
+
+logging:
+  level:
+    root: INFO
+    org.jboss.as.quickstarts.kitchensink: DEBUG
+    org.springframework.web: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+

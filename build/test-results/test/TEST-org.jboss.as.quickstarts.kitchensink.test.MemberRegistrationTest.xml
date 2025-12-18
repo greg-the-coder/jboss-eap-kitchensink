@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="org.jboss.as.quickstarts.kitchensink.test.MemberRegistrationTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2025-12-18T00:01:57" hostname="teal-kiwi-91" time="1.028">
+  <properties/>
+  <testcase name="testRegister()" classname="org.jboss.as.quickstarts.kitchensink.test.MemberRegistrationTest" time="1.028"/>
+  <system-out><![CDATA[00:01:45.001 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [org.jboss.as.quickstarts.kitchensink.test.MemberRegistrationTest]: MemberRegistrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+00:01:45.179 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration org.jboss.as.quickstarts.kitchensink.KitchensinkApplication for test class org.jboss.as.quickstarts.kitchensink.test.MemberRegistrationTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.1)
+
+2025-12-18T00:01:45.985Z  INFO 65198 --- [    Test worker] o.j.a.q.k.test.MemberRegistrationTest    : Starting MemberRegistrationTest using Java 17.0.15 with PID 65198 (started by coder in /home/coder/projects/jboss-eap-kitchensink)
+2025-12-18T00:01:45.990Z  INFO 65198 --- [    Test worker] o.j.a.q.k.test.MemberRegistrationTest    : The following 1 profile is active: "test"
+2025-12-18T00:01:49.628Z  INFO 65198 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-12-18T00:01:49.700Z  INFO 65198 --- [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.1.Final
+2025-12-18T00:01:49.749Z  INFO 65198 --- [    Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-12-18T00:01:50.390Z  WARN 65198 --- [    Test worker] org.hibernate.orm.deprecation            : HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-12-18T00:01:51.776Z  INFO 65198 --- [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-12-18T00:01:53.633Z  WARN 65198 --- [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-12-18T00:01:55.614Z  INFO 65198 --- [    Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@5fb0c234, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@6cf7de4e, org.springframework.security.web.context.SecurityContextHolderFilter@158bd27d, org.springframework.security.web.header.HeaderWriterFilter@32fcccd4, org.springframework.web.filter.CorsFilter@40c4b938, org.springframework.security.web.authentication.logout.LogoutFilter@642aa8ea, org.springframework.security.web.authentication.www.BasicAuthenticationFilter@49a6503f, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@7845f53d, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@171b82ea, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@f5b08d4, org.springframework.security.web.session.SessionManagementFilter@4893d628, org.springframework.security.web.access.ExceptionTranslationFilter@37eca4c0, org.springframework.security.web.access.intercept.AuthorizationFilter@3a296643]
+2025-12-18T00:01:57.179Z  INFO 65198 --- [    Test worker] o.j.a.q.k.test.MemberRegistrationTest    : Started MemberRegistrationTest in 11.722 seconds (process running for 13.773)
+2025-12-18T00:01:58.191Z  INFO 65198 --- [    Test worker] o.j.a.q.k.service.MemberRegistration     : Registering Jane Doe
+2025-12-18T00:01:58.314Z  INFO 65198 --- [    Test worker] o.j.a.q.k.test.MemberRegistrationTest    : Jane Doe was persisted with id 1
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
