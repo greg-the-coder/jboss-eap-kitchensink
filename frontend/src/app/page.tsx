@@ -1,14 +1,14 @@
-import { Header } from '@/components/Header';
-import { Footer } from '@/components/Footer';
-import { MemberStats } from '@/components/MemberStats';
-import { MemberRegistrationForm } from '@/components/MemberRegistrationForm';
-import { MemberList } from '@/components/MemberList';
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
+import { MemberStats } from "@/components/MemberStats";
+import { MemberRegistrationForm } from "@/components/MemberRegistrationForm";
+import { MemberList } from "@/components/MemberList";
 
 export default function Home() {
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       <Header />
-      
+
       <main className="flex-grow container mx-auto px-4 py-8">
         {/* Welcome Section */}
         <div className="text-center mb-12">
@@ -16,10 +16,11 @@ export default function Home() {
             Welcome to Kitchensink!
           </h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            This application demonstrates a modern full-stack architecture with{' '}
-            <span className="font-semibold text-blue-600">Spring Boot 3.x</span> backend and{' '}
-            <span className="font-semibold text-blue-600">Next.js 15</span> frontend.
-            Register new members and manage your community with ease.
+            This application demonstrates a modern full-stack architecture with{" "}
+            <span className="font-semibold text-blue-600">Spring Boot 3.x</span>{" "}
+            backend and{" "}
+            <span className="font-semibold text-blue-600">Next.js 15</span>{" "}
+            frontend. Register new members and manage your community with ease.
           </p>
         </div>
 
@@ -45,15 +46,30 @@ export default function Home() {
             🚀 About This Application
           </h3>
           <p className="text-blue-800 mb-3">
-            This application has been migrated from a legacy J2EE application with JSF to a modern 
-            full-stack architecture:
+            This application has been migrated from a legacy J2EE application
+            with JSF to a modern full-stack architecture via Coder and AWS
+            Transform and with help from Amazon Q Developer:
           </p>
           <ul className="list-disc list-inside text-blue-800 space-y-1 ml-4">
-            <li><strong>Backend:</strong> Spring Boot 3.x with Spring MVC, Spring Data JPA, Spring Security</li>
-            <li><strong>Frontend:</strong> Next.js 15 with TypeScript, React 19, Tailwind CSS</li>
-            <li><strong>API:</strong> RESTful API with JSON responses</li>
-            <li><strong>Validation:</strong> Client-side (Zod) and server-side (Bean Validation)</li>
-            <li><strong>Data Management:</strong> Real-time updates with React Query</li>
+            <li>
+              <strong>Backend:</strong> Spring Boot 3.x with Spring MVC, Spring
+              Data JPA, Spring Security
+            </li>
+            <li>
+              <strong>Frontend:</strong> Next.js 15 with TypeScript, React 19,
+              Tailwind CSS
+            </li>
+            <li>
+              <strong>API:</strong> RESTful API with JSON responses
+            </li>
+            <li>
+              <strong>Validation:</strong> Client-side (Zod) and server-side
+              (Bean Validation)
+            </li>
+            <li>
+              <strong>Data Management:</strong> Real-time updates with React
+              Query
+            </li>
           </ul>
         </div>
       </main>
